@@ -8,6 +8,7 @@ import icon from "astro-icon";
 export default defineConfig({
   output: "static",
   site: "https://amcr.aiscr.cz",
+  base: "/aiscr-amcr-home",
   image: {
     domains: ["unsplash.com", "images.unsplash.com"],
   },
