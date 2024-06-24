@@ -1,0 +1,80 @@
+---
+import Container from "./container.astro";
+import Sectionhead from "./sectionhead.astro";
+import { ArrowIcon } from "./ui/icons";
+
+const faq = [
+  {
+    question: "Co je to archeologie?",
+    answer:
+      "Archeologie je věda, která studuje lidskou minulost prostřednictvím vykopávek a analýzy artefaktů a jiných fyzických pozůstatků. Jejím cílem je porozumět dávným kulturám a způsobům života.",
+  },
+  {
+    question: "Jaké jsou hlavní metody používané v archeologii?",
+    answer:
+      "Hlavní metody používané v archeologii zahrnují vykopávky, průzkum terénu, datování (např. radiokarbonová metoda), analýzu artefaktů, geofyzikální průzkum a využití moderních technologií jako je LiDAR nebo fotogrammetrie.",
+  },
+  {
+    question: "Co je to stratigrafie v archeologii?",
+    answer:
+      "Stratigrafie je metoda používaná v archeologii k určení relativního stáří vrstev a objektů nalezených při vykopávkách. Je založena na principu, že starší vrstvy se obvykle nacházejí pod novějšími vrstvami.",
+  },
+  {
+    question: "Jak se stanu archeologem?",
+    answer:
+      "Chcete-li se stát archeologem, je obvykle potřeba získat vysokoškolské vzdělání v oboru archeologie nebo příbuzném oboru. Mnoho archeologů také pokračuje v postgraduálním studiu. Praktické zkušenosti z terénních prací jsou také velmi důležité.",
+  },
+  {
+    question: "Co je to artefakt?",
+    answer:
+      "Artefakt je jakýkoli předmět vyrobený nebo upravený člověkem v minulosti. Může to být cokoli od nástrojů a zbraní po šperky a umělecké předměty. Artefakty jsou klíčovými zdroji informací pro archeology.",
+  },
+  {
+    question: "Jak archeologové datují nálezy?",
+    answer:
+      "Archeologové používají různé metody datování, včetně relativního datování (např. stratigrafie) a absolutního datování (např. radiokarbonová metoda, dendrochronologie, termoluminiscence). Výběr metody závisí na typu nálezu a jeho stáří.",
+  },
+  {
+    question: "Co je to záchranná archeologie?",
+    answer:
+      "Záchranná archeologie je typ archeologického výzkumu prováděného před stavebními projekty nebo jinými činnostmi, které by mohly poškodit nebo zničit archeologické nálezy. Cílem je zachránit co nejvíce informací před tím, než budou ztraceny.",
+  },
+  {
+    question: "Jaký je rozdíl mezi archeologií a paleontologií?",
+    answer:
+      "Zatímco archeologie se zabývá studiem lidské minulosti prostřednictvím materiálních pozůstatků, paleontologie se zaměřuje na studium fosilií a prehistorického života na Zemi. Archeologie se obvykle zabývá mladším časovým obdobím než paleontologie.",
+  },
+  {
+    question: "Jak se archeologie vyvíjela v průběhu času?",
+    answer:
+      "Archeologie se vyvinula z amatérského sběratelství a hledání pokladů v 19. století do sofistikované vědecké disciplíny. Moderní archeologie využívá pokročilé technologie a interdisciplinární přístupy k získání co nejkomplexnějšího obrazu o minulosti.",
+  },
+];
+---
+
+<Container>
+  <Sectionhead>
+    <Fragment slot="title">FAQ</Fragment>
+    <Fragment slot="desc">Často kladené dotazy</Fragment>
+  </Sectionhead>
+
+  <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
+    {
+      faq.map((item) => (
+        <div class="py-5">
+          <details class="group">
+            <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+              <span> {item.question}</span>
+              <span class="transition group-open:rotate-180">
+                <ArrowIcon />
+              </span>
+            </summary>
+            <p class="text-neutral-600 mt-3 group-open:animate-fadeIn">
+              {item.answer}
+            </p>
+          </details>
+        </div>
+      ))
+    }
+  </div>
+</Container>

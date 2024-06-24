@@ -1,0 +1,107 @@
+---
+import { Picture, Image } from "astro:assets";
+import Card from "@components/card.astro";
+import IntegrationImg from "../assets/integrations.svg?url";
+import FeatureImgOne from "../assets/features/digiarchiv.png";
+import FeatureImgTwo from "../assets/features/pas.png";
+import FeatureImgThree from "../assets/features/pas.png";
+---
+
+<div class="mt-24">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    Další služby projektu <span class="text-red-600">AIS ČR</span>
+  </h2>
+  <p class="text-lg mt-4 text-slate-600">
+    Mimo mapu máme i mnoho dalšího
+  </p>
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-5 mt-16 gap-10">
+  <Card class="lg:col-span-3" color="purple">
+    <Fragment slot="image">
+      <Picture
+        src={FeatureImgOne}
+        alt="Feature image"
+        formats={["avif", "webp"]}
+        class="h-full w-full object-contain"
+        loading="lazy"
+      />
+    </Fragment>
+    <span slot="badge">Archiv</span>
+    <span slot="title">Digiarchiv</span>
+    <span slot="desc">
+      Už popsáno výše
+    </span>
+  </Card>
+  <Card class="lg:col-span-2" color="red">
+    <Fragment slot="image">
+      <Picture
+        src={FeatureImgTwo}
+        alt="Feature image"
+        formats={["avif", "webp"]}
+        class="h-full w-full object-contain"
+        loading="lazy"
+      />
+    </Fragment>
+    <span slot="badge">PAS</span>
+    <span slot="title">Amatéři hledají</span>
+    <span slot="desc">
+      Hledej a nalezneš, ale informuj nás</span
+    >
+  </Card>
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 mt-10 gap-10">
+  <Card color="red" size="sm">
+    <Fragment slot="image">
+      <Picture
+        src={FeatureImgThree}
+        alt="Feature image"
+        formats={["avif", "webp"]}
+        class="h-full w-full object-contain"
+        loading="lazy"
+      />
+    </Fragment>
+    <span slot="badge">Teater</span>
+    <span slot="title">Co is das?</span>
+    <span slot="desc">
+      Terminologie je tu.</span
+    >
+  </Card>
+
+  <Card color="purple" size="sm">
+    <Fragment slot="image">
+      <Picture
+        src={FeatureImgTwo}
+        alt="Feature image"
+        formats={["avif", "webp"]}
+        class="h-full w-full object-contain"
+        loading="lazy"
+      />
+    </Fragment>
+    <span slot="badge">Atlas</span>
+    <span slot="title">Památky a turistika?</span>
+    <span slot="desc">
+      Můžeš chodit a ničit památky místo toho abys seděl doma. Vem sprej a dej se do toho.</span
+    >
+  </Card>
+
+  <Card size="sm">
+    <Fragment slot="image">
+      <!-- // svg image. cannot use <picture/> as of now -->
+      <Image
+        src={FeatureImgOne}
+        alt="Feature image"
+        width="909"
+        height="823"
+        class="h-full w-full object-contain"
+        loading="lazy"
+      />
+    </Fragment>
+    <span slot="badge">Další</span>
+    <span slot="title">8+ aplikací</span>
+    <span slot="desc">
+      prozkoumej další služby AISu.</span
+    >
+  </Card>
+</div>

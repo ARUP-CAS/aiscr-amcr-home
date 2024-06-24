@@ -1,0 +1,165 @@
+---
+import Container from "@components/container.astro";
+import Link from "@components/ui/link.astro";
+import Dropdown from "./dropdown.astro";
+import { StickyHeader, Astronav, MenuItems, MenuIcon } from "astro-navbar";
+
+const menuitems = [
+  {
+    title: "Domů",
+    path: "/",
+  },
+  {
+    title: "Návod",
+    path: "/navod",
+  },
+  {
+    title: "AMČR PAS",
+    path: "#",
+    children: [
+      { title: "Aplikace", path: "/aplikace" },
+      { title: "Služby", path: "/sluzby" },
+      {
+        title: "Článek",
+        path: "/blog/typography-example",
+      },
+      { title: "404 Page", path: "/404" },
+    ],
+  },
+  {
+    title: "Ke stažení",
+    path: "/blog",
+  },
+  {
+    title: "Kontakt",
+    path: "/kontakt",
+  },
+];
+---
+
+<StickyHeader
+  class="sticky top-0 border-b z-20 transition-all"
+  scrollY={50}
+  defaultClass="py-5 border-transparent"
+  activeClass="py-2 bg-white/80 border-gray-200 backdrop-blur-lg">
+  <Container>
+    <div
+      class="flex flex-col lg:flex-row justify-between items-center relative z-10"
+      transition:animate="none">
+      <Astronav>
+        <div class="flex w-full lg:w-auto items-center justify-between">
+          <a
+            href="/"
+            class="text-lg flex items-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full px-2 -ml-2">
+            <svg
+            class="h-7 mr-1 fill-red-900"
+              version="1.0"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 515.000000 664.000000"
+              preserveAspectRatio="xMidYMid meet">
+              <g
+                transform="translate(0.000000,664.000000) scale(0.100000,-0.100000)"
+                stroke="none">
+                <path
+                  d="M2255 6393 c-117 -15 -323 -62 -450 -104 -504 -166 -929 -490 -1224
+-935 -191 -287 -313 -604 -368 -955 -25 -160 -25 -518 1 -684 53 -347 174
+-665 366 -954 79 -120 233 -312 448 -560 102 -117 127 -140 134 -127 5 9 128
+298 273 641 l265 625 -49 68 c-72 98 -116 184 -155 302 -46 139 -60 243 -53
+398 21 520 400 947 922 1039 124 21 317 13 442 -19 l92 -24 96 205 c53 112 92
+207 88 211 -4 4 -149 69 -321 145 -172 76 -316 143 -321 149 -4 6 -30 140 -56
+299 l-49 287 -25 -1 c-14 -1 -39 -4 -56 -6z"
+                ></path>
+                <path
+                  d="M2697 6384 c-4 -5 68 -433 74 -438 2 -1 172 -76 376 -167 205 -90
+372 -168 372 -174 0 -5 -65 -147 -144 -315 l-143 -305 26 -20 c138 -107 180
+-145 237 -212 137 -159 211 -321 259 -564 l6 -26 357 103 c197 57 464 134 593
+170 129 37 239 70 243 74 26 22 -87 371 -182 565 -119 244 -277 461 -472 650
+-319 309 -713 518 -1144 608 -143 30 -445 64 -458 51z"
+                ></path>
+                <path
+                  d="M4352 4090 c-338 -98 -615 -180 -616 -182 -1 -2 -9 -41 -18 -88 -33
+-175 -116 -351 -231 -490 -54 -65 -160 -163 -215 -200 -22 -15 -20 -18 177
+-230 l200 -215 -212 -215 c-117 -118 -225 -229 -240 -246 l-28 -31 262 -244
+c144 -134 265 -245 269 -247 27 -11 652 694 838 945 269 365 425 808 448 1278
+7 131 -2 346 -14 344 -4 -1 -283 -82 -620 -179z"
+                ></path>
+                <path
+                  d="M1862 3028 c-10 -24 -135 -314 -277 -646 l-259 -603 205 -202 c113
+-111 305 -298 428 -416 229 -220 370 -380 501 -564 41 -58 78 -106 82 -107 3
+0 38 45 77 99 173 242 358 445 650 711 93 85 169 158 168 161 -1 3 -141 135
+-312 294 -170 158 -328 305 -350 326 l-40 39 249 249 249 250 -144 153 c-79
+84 -151 152 -159 152 -8 -1 -60 -14 -115 -30 -91 -25 -116 -27 -270 -28 -144
+0 -184 3 -258 22 -113 28 -216 71 -318 133 -45 27 -84 49 -85 49 -2 0 -11 -19
+-22 -42z"
+                ></path>
+              </g>
+            </svg>
+
+            <span class="font-bold text-red-600">AM</span><span
+              class="text-slate-600 font-bold">ČR</span
+            >
+          </a>
+          <div class="block lg:hidden">
+            <MenuIcon class="w-4 h-4 text-gray-800" />
+          </div>
+        </div>
+        <MenuItems class="hidden w-full lg:w-auto mt-2 lg:flex lg:mt-0">
+          <ul class="flex flex-col lg:flex-row lg:gap-3">
+            {
+              menuitems.map((item, index) => (
+                <>
+                  {item.children && (
+                    <Dropdown
+                      title={item.title}
+                      children={item.children}
+                      lastItem={index === menuitems.length - 1}
+                    />
+                  )}
+
+                  {!item.children && (
+                    <li>
+                      <a
+                        href={item.path}
+                        class="flex lg:px-3 py-2 text-sm text-gray-600 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-offset-2 transition focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full">
+                        {item.title}
+                      </a>
+                    </li>
+                  )}
+                </>
+              ))
+            }
+          </ul>
+          <div class="lg:hidden flex items-center mt-3 gap-4">
+            <Link href="#" style="muted" block size="md">Příhlásit se</Link>
+            <Link href="#" size="md" block>Registrovat</Link>
+          </div>
+        </MenuItems>
+      </Astronav>
+      <div>
+        <div class="hidden lg:flex items-center gap-4">
+          <a
+            href="#"
+            class="text-sm px-2 py-1 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full"
+            >Registrace</a
+          >
+          <Link
+            href="#"
+            size="sm"
+            class="inline-flex items-center group gap-px">
+            <span>Aplikace</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-4 h-4 mt-px group-hover:translate-x-1 transition-transform">
+              <path
+                fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </Container>
+</StickyHeader>

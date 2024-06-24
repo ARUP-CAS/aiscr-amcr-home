@@ -1,0 +1,62 @@
+---
+import Container from "@components/container.astro";
+import Review from "@components/review.astro";
+
+const testimonials = [
+  {
+    name: "Jan Novák",
+    title: "Důchodce",
+    image: "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?w=640",
+    text: "Můžu doporučit, posílájí mě na dobré lokality. Můžu si i něco nechat. Systém je fakt dobrý.",
+  },
+  {
+    name: "Jana Nováková",
+    title: "Pašeračka artekaftů",
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=640",
+    text: "Pašovala jsem artefakty roky, nyní je můžu sama získávat a prodávat legálně. Děkuji za skvělý systém. ",
+  },
+  {
+    name: "Tomáš Jedno",
+    title: "Archeolog",
+    image: "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?w=640",
+    text: "Rychlá verze AMČR se stala realitou. Mrzí mě, že nelze objednávat meníčka, musím stále používat Wolt. Kdyby se to podařilo sjednotit, dám 5 hvězd.",
+  },
+  {
+    name: "Franz Kapka",
+    title: "Vodohospodář",
+    image: "https://images.unsplash.com/photo-1601455763557-db1bea8a9a5a?w=640",
+    text: "Už nemusím hledat vodu, nahlásím v aplikaci žáměr a archeologové přijedou a vykopou. Ušetří mi spoustu peněz. Můžu doporučit.",
+  }
+];
+---
+
+<Container>
+  <div class="mt-24">
+    <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight text-center">
+      Spokojení <span class="text-red-600">uživatelé</span>
+    </h2>
+    <p class="text-lg mt-4 text-slate-600 text-center">
+      Věří nám tisíce vykradačů hrobů po celé zemi.
+    </p>
+  </div>
+</Container>
+
+<div class="mt-10 relative overflow-x-clip">
+  <div
+    class="absolute w-96 h-96 blur-2xl -z-10 bg-gradient-radial from-red-100 right-1/3 -top-10">
+  </div>
+  <div
+    class="absolute w-96 h-96 blur-2xl -z-10 bg-gradient-radial from-purple-100 right-1/3 translate-x-2/3 top-10">
+  </div>
+  <div class="relative md:flex gap-10 overflow-hidden py-5 group">
+    <div
+      class="md:motion-safe:animate-marquee w-auto py-5 overflow-x-auto flex flex-nowrap min-w-full shrink-0 items-stretch gap-10 snap-x snap-mandatory px-5">
+      {testimonials.map((item) => <Review {...item} />)}
+    </div>
+    <!--  ↓↓ Shadow DOM to make the animation smooth (clone) ↓↓ -->
+    <div
+      class="md:motion-safe:animate-marquee hidden md:motion-reduce:hidden md:flex min-w-full shrink-0 items-center gap-10">
+      {testimonials.map((item) => <Review {...item} />)}
+    </div>
+  </div>
+</div>

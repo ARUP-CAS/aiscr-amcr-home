@@ -1,0 +1,42 @@
+---
+import { Icon } from "astro-icon/components";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Contactform from "@components/contactform.astro";
+---
+
+<Layout title="Contact">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Kontakt</Fragment>
+      <Fragment slot="desc">Nějaké otázky?</Fragment>
+    </Sectionhead>
+
+    <div class="grid md:grid-cols-2 gap-10 mx-auto max-w-4xl mt-16">
+      <div>
+        <h2 class="font-medium text-2xl text-gray-800">Kontaktuj nás</h2>
+        <p class="text-lg leading-relaxed text-slate-500 mt-3">
+          Klidně zavolej nebo dojdi.
+        </p>
+        <div class="mt-5">
+          <div class="flex items-center mt-2 space-x-2 text-gray-600">
+            <Icon class="text-gray-400 w-4 h-4" name="uil:map-marker" />
+            <span>Praha -1 = Brno</span>
+          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
+            <Icon class="text-gray-400 w-4 h-4" name="uil:envelope" />
+            <a href="mailto:info@amcr.cz">
+              info@amcr.cz
+            </a>
+          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
+            <Icon class="text-gray-400 w-4 h-4" name="uil:phone" />
+            <a href="tel:222555888">222555888</a>
+          </div>
+        </div>
+      </div>
+      <div class="bg-slate-100 p-5 md:p-8 rounded-xl mb-5">
+        <Contactform />
+      </div>
+    </div>
+  </Container>
+</Layout>
