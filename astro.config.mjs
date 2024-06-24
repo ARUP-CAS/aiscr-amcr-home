@@ -7,8 +7,8 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  site: "https://amcr.aiscr.cz",
-  base: "/aiscr-amcr-home",
+  site: "https://arup-cas.github.io/",
+  base: "/",
   image: {
     domains: ["unsplash.com", "images.unsplash.com"],
   },
