@@ -10,14 +10,15 @@ const menuitems = [
     path: "/aiscr-amcr-home/",
   },
   {
-    title: "Návod",
-    path: "/aiscr-amcr-home/navod",
+    title: "Dokumentace",
+    path: "https://amcr-help.aiscr.cz",
   },
   {
     title: "AMČR PAS",
     path: "#",
     children: [
-      { title: "Aplikace", path: "/aplikace" },
+      { title: "FAQ Archeologové", path: "/aiscr-amcr-home/blog/faq-archeologove" },
+      { title: "FAQ Spolupracovníci", path: "/aiscr-amcr-home/blog/faq-archeologove" },
       { title: "Služby", path: "/sluzby" },
       {
         title: "Článek",
@@ -50,9 +51,9 @@ const menuitems = [
         <div class="flex w-full lg:w-auto items-center justify-between">
           <a
             href="/"
-            class="text-lg flex items-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full px-2 -ml-2">
+            class="text-lg flex items-center transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amcrbrown-500 focus-visible:outline-none focus-visible:shadow-outline-amcrbrown rounded-full px-2 -ml-2">
             <svg
-            class="h-7 mr-1 fill-red-900"
+            class="h-7 mr-1 fill-amcrbrown-900"
               version="1.0"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 515.000000 664.000000"
@@ -95,7 +96,7 @@ c144 -134 265 -245 269 -247 27 -11 652 694 838 945 269 365 425 808 448 1278
               </g>
             </svg>
 
-            <span class="font-bold text-red-600">AM</span><span
+            <span class="font-bold text-amcrbrown-900">AM</span><span
               class="text-slate-600 font-bold">ČR</span
             >
           </a>
@@ -120,7 +121,7 @@ c144 -134 265 -245 269 -247 27 -11 652 694 838 945 269 365 425 808 448 1278
                     <li>
                       <a
                         href={item.path}
-                        class="flex lg:px-3 py-2 text-sm text-gray-600 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-offset-2 transition focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full">
+                        class="flex lg:px-3 py-2 text-sm text-gray-600 hover:text-amcrbrown-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition focus-visible:ring-amcrbrown-900 focus-visible:outline-none focus-visible:shadow-outline-amcrbrown rounded-full">
                         {item.title}
                       </a>
                     </li>
@@ -139,7 +140,7 @@ c144 -134 265 -245 269 -247 27 -11 652 694 838 945 269 365 425 808 448 1278
         <div class="hidden lg:flex items-center gap-4">
           <a
             href="https://amcr.aiscr.cz/accounts/register/"
-            class="text-sm px-2 py-1 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:shadow-outline-red rounded-full"
+            class="text-sm px-2 py-1 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amcrbrown-500 focus-visible:outline-none focus-visible:shadow-outline-amcrbrown rounded-full"
             >Registrace</a
           >
           <Link
