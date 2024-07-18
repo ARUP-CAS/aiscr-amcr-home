@@ -28,10 +28,10 @@ import api from "../assets/features/api.png";
       loading="lazy"
       />
     </Fragment>
-    <span slot="badge">Mapa OAO</span>
+    <!-- <span slot="badge">Mapa OAO</span> -->
     <span slot="title">Mapa archeologických organizací</span>
     <span slot="desc">
-      Najděte snadno archeologickou organizaci působící ve Vašem okolí a prohlédněte si organizace, které jsou oprávněné provádět archeologické výzkumy
+      Vyhledejte si archeologické organizace působící ve Vašem okolí a zjistěte více o organizacích oprávněných provádět archeologické výzkumy
     </span>
   </Card>
   <Card class="lg:col-span-3" color="amcrbrown">
@@ -44,16 +44,16 @@ import api from "../assets/features/api.png";
       loading="lazy"
       />
     </Fragment>
-    <span slot="badge">AMČR</span>
+    <!-- <span slot="badge">AMČR</span> -->
     <span slot="title">Oznámení o stavebním záměru</span>
     <span slot="desc">
-      Oznamte stavební či jinou činnost na území s archeologickými nálezy jednoduše prostřednictvím webového formuláře a splňte si povinnost dle § 22 odst. 2 zákona č. 20/1987 Sb. o státní památkové péči
+      Oznamte stavební či jinou činnost na území s archeologickými nálezy jednoduše prostřednictvím webového formuláře a splňte tak povinnost dle § 22 odst. 2 zákona č. 20/1987 Sb. o státní památkové péči pro Váš záměr
     </span>
   </Card>
 </div>
 
-<div class="grid md:grid-cols-2 lg:grid-cols-3 mt-10 gap-10">
-  <Card class="lg:col-span-2" color="amcrbrown">
+<div class="grid md:grid-cols-2 lg:grid-cols-5 mt-16 gap-10">
+  <Card class="lg:col-span-3" color="amcrbrown">
     <Fragment slot="image">
       <Picture
       src={amcrhelp}
@@ -63,13 +63,12 @@ import api from "../assets/features/api.png";
       loading="lazy"
       />
     </Fragment>
-    <span slot="badge">AMČR</span>
+    <!-- <span slot="badge">AMČR</span> -->
     <span slot="title">Dokumentace AMČR</span>
-    <span slot="desc">
-      Terminologie je tu.</span>
+    <span slot="desc">Uživatelská dokumentace a napověda, terminologie, popis fungování systému jako celku i jeho jednotlivých částí.</span>
   </Card>
     
-  <Card color="amcrbrown" size="sm">
+  <Card class="lg:col-span-2" color="dablue" size="sm">
     <Fragment slot="image">
       <Picture
       src={api}
@@ -79,10 +78,9 @@ import api from "../assets/features/api.png";
       loading="lazy"
       />
     </Fragment>
-    <span slot="badge">Atlas</span>
+    <!-- <span slot="badge">API</span> -->
     <span slot="title">AMČR OAI-PMH API</span>
-    <span slot="desc">
-      Můžeš chodit a ničit památky místo toho abys seděl doma. Vem sprej a dej se do toho.</span>
+    <span slot="desc">Získejte data AMČR ve strojově zpracovatelné podobě pomocí OAI-PMH API.</span>
   </Card>
       
   <!-- <Card size="sm"> -->
