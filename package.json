@@ -18,7 +18,7 @@
     "@astrojs/sitemap": "^3.0.5",
     "@astrojs/tailwind": "^5.1.0",
     "@iconify-json/bx": "^1.1.10",
-    "@iconify-json/fluent": "^1.1.47",
+    "@iconify-json/fluent": "^1.2.33",
     "@iconify-json/ph": "^1.1.10",
     "@iconify-json/uil": "^1.1.8",
     "astro-feather-icons": "^1.0.2",
