@@ -17,7 +17,7 @@
     "@astrojs/mdx": "^2.1.1",
     "@astrojs/sitemap": "^3.0.5",
     "@astrojs/tailwind": "^5.1.0",
-    "@iconify-json/bx": "^1.1.10",
+    "@iconify-json/bx": "^1.2.2",
     "@iconify-json/fluent": "^1.1.47",
     "@iconify-json/ph": "^1.1.10",
     "@iconify-json/uil": "^1.1.8",
