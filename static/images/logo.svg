@@ -1,0 +1,17 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pozadí -->
+  <rect x="2" y="2" width="36" height="36" rx="4" fill="#3B82F6"/>
+  
+  <!-- Stylizované "A" -->
+  <path d="M20 10 L26 26 L14 26 Z" fill="white"/>
+  <rect x="17" y="20" width="6" height="2" fill="#3B82F6"/>
+  
+  <!-- Text AIS ČR -->
+  <text x="45" y="18" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937">
+    AIS ČR
+  </text>
+  <text x="45" y="32" font-family="Arial, sans-serif" font-size="8" fill="#6B7280">
+    Archeologický informační systém
+  </text>
+</svg>
+
