@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Newspaper, ChevronRight } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
 
   let currentIndex = $state(0);
@@ -31,49 +32,44 @@
   }
 </script>
 
-<section id="aktuality" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-  <div class="max-w-7xl mx-auto">
+<section id="aktuality" class="news-section px-4 sm:px-6 lg:px-8" style="background-color: #EEEEEE; padding-top: 104px; padding-bottom: 80px;">
+  <div class="max-w-content">
     <!-- Header s ikonou -->
-    <div class="flex items-start mb-12">
-      <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-        </svg>
-      </div>
-      <div>
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          {m['news.title']()}
-        </h2>
-        <p class="text-gray-600">
-          {m['news.subtitle']()}
-        </p>
-      </div>
+    <div class="flex items-center" style="margin-bottom: 24px;">
+      <Newspaper size={48} color="var(--color-primary)" style="margin-right: 16px;" />
+      <h2 style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: var(--color-primary);">
+        {m['news.title']()}
+      </h2>
+    </div>
+    
+    <!-- Popis -->
+    <div style="margin-bottom: 80px;">
+      <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000;">
+        {m['news.subtitle']()}
+      </p>
     </div>
 
     <!-- Karty -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {#each visibleNews as item}
-        <article class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-          <div class="p-6">
-            <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-4">
-              {(m as any)[`news.${item.key}.badge`]()}
-            </span>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
-              {(m as any)[`news.${item.key}.title`]()}
-            </h3>
-            <p class="text-gray-600 mb-4">
-              {(m as any)[`news.${item.key}.excerpt`]()}
-            </p>
-            <a
-              href={(m as any)[`news.${item.key}.link`]()}
-              class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center"
-            >
-              {m['news.readMore']()}
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
+        <article class="hover:shadow-lg transition-shadow" style="background-color: rgba(255, 255, 255, 0.8); padding: 24px; max-height: 415px; display: flex; flex-direction: column;">
+          <span class="inline-block bg-primary" style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px; padding: 6px 12px; width: fit-content;">
+            {(m as any)[`news.${item.key}.badge`]()}
+          </span>
+          <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 12px;">
+            {(m as any)[`news.${item.key}.title`]()}
+          </h3>
+          <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.6; margin-bottom: 16px;">
+            {(m as any)[`news.${item.key}.excerpt`]()}
+          </p>
+          <a
+            href={(m as any)[`news.${item.key}.link`]()}
+            class="inline-flex items-center hover:underline"
+            style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: none; gap: 4px;"
+          >
+            <span>{m['news.readMore']()}</span>
+            <ChevronRight size={16} />
+          </a>
         </article>
       {/each}
     </div>
@@ -103,4 +99,14 @@
     </div>
   </div>
 </section>
+
+<style>
+  .news-section {
+    position: relative;
+    background-image: url('/images/bg-news.png');
+    background-size: 1312px auto;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+</style>
 

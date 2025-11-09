@@ -1,77 +1,117 @@
 <script lang="ts">
+  import { FileStack, BookOpen, BookText, Wrench, ChevronDown } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  
+  let expandedCategory = $state<string | null>(null);
+  
+  function toggleCategory(category: string) {
+    expandedCategory = expandedCategory === category ? null : category;
+  }
 </script>
 
-<section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-  <div class="max-w-7xl mx-auto">
+<section class="downloads-hero-section px-4 sm:px-6 lg:px-8" style="margin-top: 120px; padding-top: 60px; padding-bottom: 60px;">
+  <div class="max-w-content w-full">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Levý sloupec -->
-      <div class="flex flex-col justify-center">
-        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-          {m['downloads.hero.title']()}
+      <div class="flex flex-col">
+        <h1 class="hero-title" style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 48px; line-height: 1.2; text-align: left;">
+          Ke stažení / odkazy
         </h1>
-        <p class="text-xl text-gray-600 mb-8">
-          {m['downloads.hero.subtitle']()}
+        <p class="hero-subtitle" style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 400; color: #000000; margin-bottom: 48px; text-align: left; line-height: 1.6;">
+          Zde si můžete stáhnout užitečné dokumenty, soubory a aplikace, které Vám umožní blíže se seznámit s AMČR a užívaným popisným systémem. Zároveň zde naleznete odkazy na další užitečné související zdroje.
         </p>
-        <div>
-          <a
-            href="#dokumenty"
-            class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
-          >
-            {m['downloads.hero.cta']()}
-          </a>
-        </div>
       </div>
 
-      <!-- Pravý sloupec -->
-      <div class="flex flex-col justify-center bg-white rounded-lg shadow-md p-8">
-        <p class="text-sm text-gray-600 mb-4">
-          {m['downloads.hero.intro']()}
-        </p>
-        
-        <ul class="text-sm text-gray-700 mb-6 space-y-2">
-          <li class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            {m['downloads.hero.point1']()}
-          </li>
-          <li class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            {m['downloads.hero.point2']()}
-          </li>
-          <li class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            {m['downloads.hero.point3']()}
-          </li>
-        </ul>
+      <!-- Pravý sloupec - Rozklikávací kategorie -->
+      <div class="flex flex-col">
+        <div class="space-y-0">
+          <!-- Základní dokumentace -->
+          <div style="border-top: 1px solid #000000; border-bottom: 1px solid #000000;">
+            <button
+              onclick={() => toggleCategory('zakladni')}
+              class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
+              style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
+            >
+              <FileStack size={48} color="#000000" />
+              <span class="flex-1">Základní dokumentace</span>
+              <ChevronDown 
+                size={24} 
+                color="#000000"
+                class="transform transition-transform {expandedCategory === 'zakladni' ? 'rotate-180' : ''}"
+              />
+            </button>
+          </div>
 
-        <div class="space-y-0 border border-gray-900 rounded-lg overflow-hidden">
-          <a
-            href="#dokumenty"
-            class="block w-full px-6 py-3 text-left text-gray-900 hover:bg-gray-50 transition-colors border-b border-gray-900"
-          >
-            {m['downloads.hero.btn1']()}
-          </a>
-          <a
-            href="#napoveda"
-            class="block w-full px-6 py-3 text-left text-gray-900 hover:bg-gray-50 transition-colors border-b border-gray-900"
-          >
-            {m['downloads.hero.btn2']()}
-          </a>
-          <a
-            href="#kontakt"
-            class="block w-full px-6 py-3 text-left text-gray-900 hover:bg-gray-50 transition-colors"
-          >
-            {m['downloads.hero.btn3']()}
-          </a>
+          <!-- Vzorové dokumenty -->
+          <div style="border-bottom: 1px solid #000000;">
+            <button
+              onclick={() => toggleCategory('vzorove')}
+              class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
+              style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
+            >
+              <BookOpen size={48} color="#000000" />
+              <span class="flex-1">Vzorové dokumenty</span>
+              <ChevronDown 
+                size={24} 
+                color="#000000"
+                class="transform transition-transform {expandedCategory === 'vzorove' ? 'rotate-180' : ''}"
+              />
+            </button>
+          </div>
+
+          <!-- Publikace a materiály -->
+          <div style="border-bottom: 1px solid #000000;">
+            <button
+              onclick={() => toggleCategory('publikace')}
+              class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
+              style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
+            >
+              <BookText size={48} color="#000000" />
+              <span class="flex-1">Publikace a materiály</span>
+              <ChevronDown 
+                size={24} 
+                color="#000000"
+                class="transform transition-transform {expandedCategory === 'publikace' ? 'rotate-180' : ''}"
+              />
+            </button>
+          </div>
+
+          <!-- Data a nástroje -->
+          <div style="border-bottom: 1px solid #000000;">
+            <button
+              onclick={() => toggleCategory('data')}
+              class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
+              style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
+            >
+              <Wrench size={48} color="#000000" />
+              <span class="flex-1">Data a nástroje</span>
+              <ChevronDown 
+                size={24} 
+                color="#000000"
+                class="transform transition-transform {expandedCategory === 'data' ? 'rotate-180' : ''}"
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .downloads-hero-section {
+    position: relative;
+    background-color: #DDF0EE;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 36px !important;
+    }
+    
+    .hero-subtitle {
+      font-size: 18px !important;
+    }
+  }
+</style>
 
