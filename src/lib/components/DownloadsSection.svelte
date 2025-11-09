@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { FileText, Download, ExternalLink, Globe } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
 
   interface Props {
@@ -8,75 +9,113 @@
 
   let { prefix, sectionId = 'ke-stazeni' }: Props = $props();
 
-  const categories = [
-    { key: 'cat1' },
-    { key: 'cat2' },
-    { key: 'cat3' }
-  ];
-
-  const documents = {
-    cat1: [
-      { key: 'doc1' },
-      { key: 'doc2' }
-    ],
-    cat2: [
-      { key: 'doc3' },
-      { key: 'doc4' }
-    ],
-    cat3: [
-      { key: 'doc5' },
-      { key: 'doc6' }
-    ]
+  // Různé počty dokumentů pro různé stránky
+  const getCategoriesForPrefix = (prefix: string) => {
+    if (prefix === 'amcrPas') {
+      return [
+        { key: 'cat1' },
+        { key: 'cat2' },
+        { key: 'cat3' },
+        { key: 'cat4' }
+      ];
+    }
+    // Pro downloadsPage
+    return [
+      { key: 'cat1' },
+      { key: 'cat2' },
+      { key: 'cat3' }
+    ];
   };
+
+  const getDocumentsForCategory = (prefix: string, categoryKey: string) => {
+    if (prefix === 'amcrPas') {
+      if (categoryKey === 'cat1') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }, { key: 'doc7' }];
+      if (categoryKey === 'cat2') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }];
+      if (categoryKey === 'cat3') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }];
+      if (categoryKey === 'cat4') return [{ key: 'doc1' }, { key: 'doc2' }];
+    }
+    // Pro downloadsPage
+    if (categoryKey === 'cat1') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }, { key: 'doc7' }, { key: 'doc8' }];
+    if (categoryKey === 'cat2') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }];
+    if (categoryKey === 'cat3') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }];
+    return [];
+  };
+
+  const categories = getCategoriesForPrefix(prefix);
 </script>
 
-<section id={sectionId} class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-12 text-center">
+<section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'bg-white'}" style="padding-top: 80px; padding-bottom: 80px;">
+  <div class="max-w-content">
+    <h2 class="font-bold mb-12 text-center" style="font-family: 'Roboto Slab', serif; font-size: 48px; color: var(--color-primary);">
       {(m as any)[`${prefix}.downloads.title`]()}
     </h2>
 
     <div class="space-y-12">
       {#each categories as category}
         <div>
-          <h3 class="text-xl font-bold text-gray-900 mb-6">
+          <h3 class="font-bold mb-6 text-center" style="font-family: 'Roboto', sans-serif; font-size: 20px; color: #000000;">
             {(m as any)[`${prefix}.downloads.${category.key}.title`]()}
           </h3>
 
           <div class="space-y-3">
-            {#each documents[category.key as keyof typeof documents] as doc}
-              <div class="flex items-center justify-between p-4 border border-gray-900 rounded-lg hover:bg-gray-50 transition-colors">
-                <div class="flex items-start space-x-4 flex-1">
-                  <!-- Ikona dokumentu -->
-                  <div class="flex-shrink-0">
-                    <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
+            {#each getDocumentsForCategory(prefix, category.key) as doc}
+              {@const titleKey = `${prefix}.downloads.${category.key}.${doc.key}.title`}
+              {@const descKey = `${prefix}.downloads.${category.key}.${doc.key}.description`}
+              {@const fileKey = `${prefix}.downloads.${category.key}.${doc.key}.file`}
+              {@const typeKey = `${prefix}.downloads.${category.key}.${doc.key}.type`}
+              {@const titleFn = (m as any)[titleKey]}
+              {@const descFn = (m as any)[descKey]}
+              {@const fileFn = (m as any)[fileKey]}
+              {@const typeFn = (m as any)[typeKey]}
+              {#if titleFn && descFn && fileFn}
+                {@const isLink = typeFn && typeFn() === 'link'}
+                <div class="flex items-center justify-between bg-white hover:bg-gray-50 transition-colors" style="padding: 16px; border: 1px solid #000000;">
+                  <div class="flex items-start space-x-4 flex-1">
+                    <!-- Ikona dokumentu nebo globe -->
+                    <div class="flex-shrink-0">
+                      {#if isLink}
+                        <Globe size={32} color="#000000" />
+                      {:else}
+                        <FileText size={32} color="#000000" />
+                      {/if}
+                    </div>
+                    
+                    <!-- Název a popis -->
+                    <div class="flex-1 min-w-0">
+                      <h4 style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000; margin-bottom: 4px;">
+                        {titleFn()}
+                      </h4>
+                      <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #666;">
+                        {descFn()}
+                      </p>
+                    </div>
                   </div>
-                  
-                  <!-- Název a popis -->
-                  <div class="flex-1 min-w-0">
-                    <h4 class="text-base font-semibold text-gray-900 mb-1">
-                      {(m as any)[`${prefix}.downloads.${category.key}.${doc.key}.title`]()}
-                    </h4>
-                    <p class="text-sm text-gray-600">
-                      {(m as any)[`${prefix}.downloads.${category.key}.${doc.key}.description`]()}
-                    </p>
-                  </div>
-                </div>
 
-                <!-- Ikona stáhnout -->
-                <a
-                  href={(m as any)[`${prefix}.downloads.${category.key}.${doc.key}.file`]()}
-                  download
-                  class="flex-shrink-0 ml-4 p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
-                  aria-label={(m as any)[`${prefix}.downloads.downloadLabel`]()}
-                >
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                </a>
-              </div>
+                  <!-- Tlačítko stáhnout nebo přejít -->
+                  {#if isLink}
+                    <a
+                      href={fileFn()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
+                      style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
+                    >
+                      <span>přejít</span>
+                      <ExternalLink size={16} color="#000000" />
+                    </a>
+                  {:else}
+                    <a
+                      href={fileFn()}
+                      download
+                      class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
+                      style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
+                    >
+                      <span>stáhnout</span>
+                      <Download size={16} color="#000000" />
+                    </a>
+                  {/if}
+                </div>
+              {/if}
             {/each}
           </div>
         </div>
@@ -84,4 +123,21 @@
     </div>
   </div>
 </section>
+
+<style>
+  .downloads-amcr-pas {
+    position: relative;
+    background-image: url('/images/amcr-pas/bg-amcr-pas-downloads.png');
+    background-size: 1312px auto;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+  }
+  
+  @media (max-width: 768px) {
+    .downloads-amcr-pas {
+      background-image: none;
+    }
+  }
+</style>
 

@@ -1,111 +1,245 @@
 <script lang="ts">
-  import { m } from '$lib/paraglide/messages.js';
+	// Preview nejnovějších blog postů
+	import { resolve } from '$app/paths';
+	import { Shovel, ArrowLeft, ArrowRight } from '@lucide/svelte';
+	import { m } from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime';
+	
+	let blogPosts = $state<any[]>([]);
+	
+	$effect(() => {
+		try {
+			const locale = getLocale();
+			const allModules = import.meta.glob('/src/content/blog/*.md', { eager: true });
+			
+			console.log('Loaded modules:', Object.keys(allModules));
+			
+			const posts = Object.entries(allModules)
+				.map(([path, module]) => {
+					const { metadata } = module as any;
+					const fileName = path.split('/').pop() || '';
+					const slug = fileName.replace(/\.(cs|en)\.md$/, '').replace(/\.md$/, '');
+					
+					return {
+						slug,
+						title: metadata?.title || 'Bez názvu',
+						excerpt: metadata?.excerpt || '',
+						date: metadata?.date || new Date().toISOString().split('T')[0],
+						category: metadata?.category || '',
+						published: metadata?.published !== false,
+						locale: metadata?.locale || 'cs',
+						categoryColor: metadata?.category === 'Objevy' || metadata?.category === 'Discoveries' ? 'bg-purple-600' : 
+									   metadata?.category === 'Technologie' || metadata?.category === 'Technology' ? 'bg-blue-600' : 'bg-green-600',
+						author: metadata?.author || 'AIS CR Team',
+						authorRole: metadata?.authorRole || '',
+						authorImage: metadata?.authorImage || '',
+						image: metadata?.image || '/images/blog/placeholder.png',
+						readTime: metadata?.readingTime || (locale === 'cs' ? '5 minut' : '5 minutes')
+					};
+				})
+				.filter(post => post.published && post.locale === locale)
+				.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+				.slice(0, 3);
+			
+			console.log('Filtered posts:', posts);
+			blogPosts = posts;
+		} catch (err) {
+			console.error('Error loading blog posts:', err);
+		}
+	});
 
-  let currentIndex = $state(0);
+	function formatDate(dateString: string) {
+		const locale = getLocale();
+		const date = new Date(dateString);
+		return date.toLocaleDateString(locale === 'cs' ? 'cs-CZ' : 'en-US', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		});
+	}
 
-  const posts = [
-    { key: 'post1' },
-    { key: 'post2' },
-    { key: 'post3' },
-    { key: 'post4' },
-    { key: 'post5' }
-  ];
+	let scrollContainer: HTMLElement;
+	let canScrollLeft = $state(false);
+	let canScrollRight = $state(true);
 
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(posts.length / itemsPerPage);
+	function updateScrollButtons() {
+		if (!scrollContainer) return;
+		
+		const scrollLeft = scrollContainer.scrollLeft;
+		const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+		
+		canScrollLeft = scrollLeft > 5; // malá tolerance
+		canScrollRight = scrollLeft < maxScroll - 5; // malá tolerance
+		
+		console.log('Scroll update:', { scrollLeft, maxScroll, canScrollLeft, canScrollRight });
+	}
 
-  const visiblePosts = $derived(
-    posts.slice(currentIndex * itemsPerPage, (currentIndex + 1) * itemsPerPage)
-  );
+	$effect(() => {
+		// Vícenásobné pokusy o inicializaci
+		const initButtons = () => {
+			if (scrollContainer) {
+				updateScrollButtons();
+				scrollContainer.addEventListener('scroll', updateScrollButtons, { passive: true });
+				return true;
+			}
+			return false;
+		};
+		
+		// Zkusíme hned, pak s delayem
+		if (!initButtons()) {
+			setTimeout(() => {
+				if (!initButtons()) {
+					setTimeout(initButtons, 500);
+				}
+			}, 100);
+		}
+		
+		return () => {
+			if (scrollContainer) {
+				scrollContainer.removeEventListener('scroll', updateScrollButtons);
+			}
+		};
+	});
 
-  function nextPage() {
-    if (currentIndex < totalPages - 1) {
-      currentIndex++;
-    }
-  }
+	function scrollLeft() {
+		if (!canScrollLeft || !scrollContainer) return;
+		const cardWidth = 414; // 390px karta + 24px gap
+		scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+		setTimeout(updateScrollButtons, 500);
+	}
 
-  function prevPage() {
-    if (currentIndex > 0) {
-      currentIndex--;
-    }
-  }
+	function scrollRight() {
+		if (!canScrollRight || !scrollContainer) return;
+		const cardWidth = 414; // 390px karta + 24px gap
+		scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+		setTimeout(updateScrollButtons, 500);
+	}
 </script>
 
-<section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-  <div class="max-w-7xl mx-auto">
-    <!-- Header s ikonou -->
-    <div class="flex flex-col items-center text-center mb-12">
-      <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-        </svg>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-        {m['amcrPas.blog.title']()}
-      </h2>
-      <p class="text-gray-600 max-w-2xl">
-        {m['amcrPas.blog.subtitle']()}
-      </p>
-    </div>
+<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px;">
+	<div class="w-full px-4 sm:px-6 lg:px-8" style="max-width: 1312px; margin: 0 auto;">
+		
+		<!-- Header with icon -->
+		<div class="text-center mb-16">
+			<div class="flex justify-center" style="margin-bottom: 16px;">
+				<Shovel size="63" color="#721C17" />
+			</div>
+			<h2 class="font-bold mb-4" style="font-family: 'Roboto Slab', serif; color: #721C17; font-size: 48px;">
+				Když spolupráce funguje
+			</h2>
+			<p class="text-base text-gray-700 max-w-4xl mx-auto leading-relaxed" style="font-family: 'Roboto', sans-serif; font-weight: 400;">
+				Zkušenosti těch, kteří dokazují, že archeologie a detektoring mohou jít ruku v ruce.
+			</p>
+		</div>
 
-    <!-- Karty -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-      {#each visiblePosts as post}
-        <article class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-          <div class="aspect-video bg-gray-200">
-            <img
-              src={(m as any)[`amcrPas.blog.${post.key}.image`]()}
-              alt={(m as any)[`amcrPas.blog.${post.key}.title`]()}
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="p-6">
-            <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">
-              {(m as any)[`amcrPas.blog.${post.key}.badge`]()}
-            </span>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">
-              {(m as any)[`amcrPas.blog.${post.key}.title`]()}
-            </h3>
-            <p class="text-gray-600 mb-4">
-              {(m as any)[`amcrPas.blog.${post.key}.excerpt`]()}
-            </p>
-            <a
-              href={(m as any)[`amcrPas.blog.${post.key}.link`]()}
-              class="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center"
-            >
-              {m['amcrPas.blog.readMore']()}
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-        </article>
-      {/each}
-    </div>
+		<!-- Debug info -->
+		{#if blogPosts.length === 0}
+			<div class="text-center py-12 bg-gray-100 rounded-lg mb-8">
+				<p class="text-gray-600">Načítání článků... (pokud se nic nezobrazí, zkontrolujte konzoli)</p>
+				<p class="text-sm text-gray-500 mt-2">Debug: {Object.keys(import.meta.glob('/src/content/blog/*.md', { eager: true })).length} souborů nalezeno</p>
+			</div>
+		{/if}
 
-    <!-- Navigační tlačítka -->
-    <div class="flex justify-end items-center space-x-2">
-      <button
-        onclick={prevPage}
-        disabled={currentIndex === 0}
-        class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label={m['amcrPas.blog.previous']()}
-      >
-        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        onclick={nextPage}
-        disabled={currentIndex >= totalPages - 1}
-        class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label={m['amcrPas.blog.next']()}
-      >
-        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
-  </div>
+		<!-- Scrollable cards container -->
+		<div class="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
+			<!-- Scrollable cards -->
+			<div 
+				bind:this={scrollContainer}
+				class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide px-4 sm:px-6 lg:px-8"
+				style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"
+				onscroll={updateScrollButtons}
+			>
+				{#each blogPosts as post}
+					<article class="flex-none bg-white shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex flex-col" style="scroll-snap-align: start; width: 390px; height: 629px; padding: 24px;">
+						<!-- Image -->
+						<div class="overflow-hidden" style="height: 300px; width: 100%;">
+							<img src={post.image} alt={post.title} class="w-full h-full object-cover" />
+						</div>
+						
+						<div class="flex flex-col flex-1" style="margin-top: 24px;">
+							<!-- Category badge -->
+							<div class="mb-3">
+								<span class="text-white text-xs px-3 py-1 {post.categoryColor}" style="font-family: 'Roboto', sans-serif;">
+									{post.category}
+								</span>
+							</div>
+							
+						<!-- Title -->
+						<h3 class="text-xl font-semibold text-gray-900 mb-3 leading-tight" style="font-family: 'Roboto', sans-serif;">
+							<a href={resolve(`/blog/${post.slug}`)} class="hover:text-red-600 transition-colors">
+								{post.title}
+							</a>
+						</h3>
+							
+							<!-- Excerpt -->
+							<p class="text-gray-600 leading-relaxed mb-6 text-sm flex-1" style="font-family: 'Roboto', sans-serif;">
+								{post.excerpt}
+							</p>
+							
+							<!-- Author and meta info - always at bottom -->
+							<div class="flex items-start space-x-3 mt-auto" style="font-family: 'Roboto', sans-serif;">
+								{#if post.authorImage}
+									<img src={post.authorImage} alt={post.author} class="rounded-full flex-shrink-0 object-cover" style="width: 48px; height: 48px;" />
+								{:else}
+									<div class="bg-gray-400 rounded-full flex-shrink-0" style="width: 48px; height: 48px;"></div>
+								{/if}
+								<div class="flex-1 flex flex-col justify-between" style="height: 48px;">
+									<div class="font-bold text-gray-900" style="font-size: 14px;">{post.author}</div>
+									<div class="text-gray-500 flex items-center space-x-2" style="font-size: 14px;">
+										<span>{formatDate(post.date)}</span>
+										<span>•</span>
+										<span>{post.readTime}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Navigation buttons moved below -->
+		<div class="flex justify-end space-x-3">
+			<button 
+				onclick={scrollLeft}
+				class="bg-white rounded-full p-3 shadow-md transition-shadow {canScrollLeft ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'}"
+				disabled={!canScrollLeft}
+			>
+				<ArrowLeft size="20" color={canScrollLeft ? "#666" : "#ccc"} />
+			</button>
+			
+			<button 
+				onclick={scrollRight}
+				class="bg-white rounded-full p-3 shadow-md transition-shadow {canScrollRight ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'}"
+				disabled={!canScrollRight}
+			>
+				<ArrowRight size="20" color={canScrollRight ? "#666" : "#ccc"} />
+			</button>
+		</div>
+
+	</div>
 </section>
 
+<style>
+	.blog-section {
+		background-image: url('/images/amcr-pas/bg-amcr-pas-blog.png');
+		background-size: 1312px auto;
+		background-position: center top;
+		background-repeat: no-repeat;
+	}
+	
+	/* Schovat pozadí na mobilech */
+	@media (max-width: 768px) {
+		.blog-section {
+			background-image: none;
+		}
+	}
+	
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+</style>
