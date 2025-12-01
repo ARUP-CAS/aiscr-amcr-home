@@ -5,11 +5,11 @@
   let currentIndex = $state(0);
 
   const news = [
-    { key: 'news1' },
-    { key: 'news2' },
-    { key: 'news3' },
-    { key: 'news4' },
-    { key: 'news5' }
+    { key: 'news1', image: '/images/blog/placeholder.webp', date: '15. 11. 2024', time: '14:30' },
+    { key: 'news2', image: '/images/blog/placeholder.webp', date: '8. 11. 2024', time: '10:15' },
+    { key: 'news3', image: '/images/blog/placeholder.webp', date: '1. 11. 2024', time: '16:45' },
+    { key: 'news4', image: '/images/blog/placeholder.webp', date: '25. 10. 2024', time: '09:00' },
+    { key: 'news5', image: '/images/blog/placeholder.webp', date: '18. 10. 2024', time: '13:20' }
   ];
 
   const itemsPerPage = 3;
@@ -52,24 +52,45 @@
     <!-- Karty -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {#each visibleNews as item}
-        <article class="hover:shadow-lg transition-shadow" style="background-color: rgba(255, 255, 255, 0.8); padding: 24px; max-height: 415px; display: flex; flex-direction: column;">
-          <span class="inline-block bg-primary" style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px; padding: 6px 12px; width: fit-content;">
-            {(m as any)[`news.${item.key}.badge`]()}
-          </span>
-          <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 12px;">
-            {(m as any)[`news.${item.key}.title`]()}
-          </h3>
-          <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.6; margin-bottom: 16px;">
-            {(m as any)[`news.${item.key}.excerpt`]()}
-          </p>
-          <a
-            href={(m as any)[`news.${item.key}.link`]()}
-            class="inline-flex items-center hover:underline"
-            style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: none; gap: 4px;"
-          >
-            <span>{m['news.readMore']()}</span>
-            <ChevronRight size={16} />
-          </a>
+        <article class="hover:shadow-lg transition-shadow overflow-hidden" style="background-color: rgba(255, 255, 255, 0.8); display: flex; flex-direction: column;">
+          <!-- Obrázek -->
+          {#if item.image}
+            <div class="aspect-video overflow-hidden">
+              <img 
+                src={item.image} 
+                alt={(m as any)[`news.${item.key}.title`]()} 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          {/if}
+          
+          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+            <!-- Časová známka -->
+            <div class="flex items-center gap-2 mb-3" style="font-family: 'Roboto', sans-serif; font-size: 12px; color: #666;">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{item.date} • {item.time}</span>
+            </div>
+            
+            <span class="inline-block bg-primary" style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px; padding: 6px 12px; width: fit-content;">
+              {(m as any)[`news.${item.key}.badge`]()}
+            </span>
+            <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 12px;">
+              {(m as any)[`news.${item.key}.title`]()}
+            </h3>
+            <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.6; margin-bottom: 16px; flex: 1;">
+              {(m as any)[`news.${item.key}.excerpt`]()}
+            </p>
+            <a
+              href={(m as any)[`news.${item.key}.link`]()}
+              class="inline-flex items-center hover:underline"
+              style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: none; gap: 4px;"
+            >
+              <span>{m['news.readMore']()}</span>
+              <ChevronRight size={16} />
+            </a>
+          </div>
         </article>
       {/each}
     </div>
@@ -103,7 +124,7 @@
 <style>
   .news-section {
     position: relative;
-    background-image: url('/images/bg-news.png');
+    background-image: url('/images/bg-news.webp');
     background-size: 1312px auto;
     background-position: center top;
     background-repeat: no-repeat;

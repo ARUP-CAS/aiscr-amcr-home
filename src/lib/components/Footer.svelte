@@ -2,6 +2,26 @@
 	// Footer komponenta
 	import { MapPin, User, Globe, Mail, Facebook, Linkedin, Youtube, Github, CircleUser, Compass, MailOpen } from '@lucide/svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { onMount, getContext } from 'svelte';
+
+	// Získat callback z contextu
+	const openCookieBanner = getContext<(() => void) | undefined>('openCookieBanner');
+
+	let currentLocale = $state('cs');
+
+	onMount(() => {
+		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+	});
+
+	function getBasePath(): string {
+		return currentLocale === 'en' ? '/en' : '';
+	}
+	
+	function handleCookieSettings() {
+		if (openCookieBanner) {
+			openCookieBanner();
+		}
+	}
 </script>
 
 <footer id="kontakty" class="footer-section py-16 border-t border-black" style="font-family: 'Roboto', sans-serif; background-color: #e5e7eb;">
@@ -19,32 +39,27 @@
 					
 					<div class="space-y-3">
 						<div>
-							<a href="/" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
-								{m['footer.nav.home']()}
-							</a>
-						</div>
-						<div>
-							<a href="/#aplikace" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getBasePath()}/#aplikace" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.services']()}
 							</a>
 						</div>
 						<div>
-							<a href="/blog" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getBasePath()}/blog" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.blog']()}
 							</a>
 						</div>
 						<div>
-							<a href="/#faq" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getBasePath()}/#faq" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.faq']()}
 							</a>
 						</div>
 						<div>
-							<a href="/#terms" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/podminky-uziti" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.terms']()}
 							</a>
 						</div>
 						<div>
-							<a href="/#about" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.about']()}
 							</a>
 						</div>
@@ -152,7 +167,7 @@
 					<span>{@html m['footer.copyright']()}</span>
 					<a href="https://amcr-help.aiscr.cz/zakladni-info/osobni-udaje.html" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.privacyPolicy']()}</a>
 					<a href="https://www.aiscr.cz/podminky-uziti" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.termsOfUse']()}</a>
-					<a href="https://www.aiscr.cz/cookies" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.cookiePolicy']()}</a>
+					<button onclick={handleCookieSettings} class="hover:text-gray-700 underline bg-transparent border-none cursor-pointer p-0" style="font-family: 'Roboto', sans-serif; font-size: inherit; color: inherit;">{m['footer.cookiePolicy']()}</button>
 					<span>{m['footer.designBy']()}</span>
 				</div>
 
@@ -193,7 +208,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-image: url('/images/bg-footer.png');
+		background-image: url('/images/bg-footer.webp');
 		background-size: 1312px;
 		background-position: center top;
 		background-repeat: no-repeat;

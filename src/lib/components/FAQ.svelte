@@ -96,7 +96,7 @@
 
 <style>
 	.faq-section {
-		background-image: url('/images/bg-faq.png');
+		background-image: url('/images/bg-faq.webp');
 		background-size: 1312px auto;
 		background-position: center top;
 		background-repeat: no-repeat;

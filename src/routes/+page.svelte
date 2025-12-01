@@ -1,5 +1,6 @@
 <script lang="ts">
   import Header from '$lib/components/Header.svelte';
+  import NewsBanner from '$lib/components/NewsBanner.svelte';
   import Hero from '$lib/components/Hero.svelte';
   import Features from '$lib/components/Features.svelte';
   import QuickApps from '$lib/components/QuickApps.svelte';
@@ -12,6 +13,7 @@
 
 <div class="min-h-screen flex flex-col">
   <Header />
+  <NewsBanner />
   
   <main class="flex-1">
     <Hero />

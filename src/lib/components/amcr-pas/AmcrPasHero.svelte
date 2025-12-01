@@ -75,7 +75,7 @@
 <style>
   .amcr-pas-hero-section {
     position: relative;
-    background-image: url('/images/amcr-pas/bg-amcr-pas-hero.png');
+    background-image: url('/images/amcr-pas/bg-amcr-pas-hero.webp');
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;

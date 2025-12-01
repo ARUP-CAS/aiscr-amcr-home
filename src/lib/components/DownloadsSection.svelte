@@ -51,8 +51,9 @@
     </h2>
 
     <div class="space-y-12">
-      {#each categories as category}
-        <div>
+      {#each categories as category, index}
+        {@const sectionIds = ['zakladni-dokumentace', 'publikace-materialy', 'data-nastroje']}
+        <div id={sectionIds[index]} style="scroll-margin-top: 140px;">
           <h3 class="font-bold mb-6 text-center" style="font-family: 'Roboto', sans-serif; font-size: 20px; color: #000000;">
             {(m as any)[`${prefix}.downloads.${category.key}.title`]()}
           </h3>
@@ -127,7 +128,7 @@
 <style>
   .downloads-amcr-pas {
     position: relative;
-    background-image: url('/images/amcr-pas/bg-amcr-pas-downloads.png');
+    background-image: url('/images/amcr-pas/bg-amcr-pas-downloads.webp');
     background-size: 1312px auto;
     background-position: center top;
     background-repeat: no-repeat;

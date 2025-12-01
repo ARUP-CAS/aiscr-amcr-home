@@ -2,13 +2,13 @@
   import { m } from '$lib/paraglide/messages.js';
 
   const tools = [
-    { key: 'tool1', imagePosition: 'right', image: '/images/tools-1.png' },
-    { key: 'tool2', imagePosition: 'left', image: '/images/tools-2.png' },
-    { key: 'tool3', imagePosition: 'right', image: '/images/tools-3.png' },
-    { key: 'tool4', imagePosition: 'left', image: '/images/tools-4.png' },
-    { key: 'tool5', imagePosition: 'right', image: '/images/tools-5.png' },
-    { key: 'tool6', imagePosition: 'left', image: '/images/tools-6.png' },
-    { key: 'tool7', imagePosition: 'right', image: '/images/tools-7.png' }
+    { key: 'tool1', imagePosition: 'right', image: '/images/tools-1.webp' },
+    { key: 'tool2', imagePosition: 'left', image: '/images/tools-2.webp' },
+    { key: 'tool3', imagePosition: 'right', image: '/images/tools-3.webp' },
+    { key: 'tool4', imagePosition: 'left', image: '/images/tools-4.webp' },
+    { key: 'tool5', imagePosition: 'right', image: '/images/tools-5.webp' },
+    { key: 'tool6', imagePosition: 'left', image: '/images/tools-6.webp' },
+    { key: 'tool7', imagePosition: 'right', image: '/images/tools-7.webp' }
   ];
 </script>
 

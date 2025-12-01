@@ -1,12 +1,20 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { ChevronDown, ChevronUp } from '@lucide/svelte';
 
   const apps = [
-    { key: 'app1', icon: 'search', bgImage: '/images/bg-quick-select-1.png' },
-    { key: 'app2', icon: 'map', bgImage: '/images/bg-quick-select-2.png' },
-    { key: 'app3', icon: 'database', bgImage: '/images/bg-quick-select-3.png' },
-    { key: 'app4', icon: 'file', bgImage: '/images/bg-quick-select-4.png' }
+    { key: 'app1', icon: 'search', bgImage: '/images/bg-quick-select-1.webp' },
+    { key: 'app2', icon: 'map', bgImage: '/images/bg-quick-select-2.webp' },
+    { key: 'app3', icon: 'database', bgImage: '/images/bg-quick-select-3.webp' },
+    { key: 'app4', icon: 'file', bgImage: '/images/bg-quick-select-4.webp' }
   ];
+  
+  // Sledování rozbalených aplikací
+  let expandedApps = $state<Record<string, boolean>>({});
+  
+  function toggleApp(appKey: string) {
+    expandedApps[appKey] = !expandedApps[appKey];
+  }
 </script>
 
 <section id="aplikace" class="px-4 sm:px-6 lg:px-8 bg-gray-50" style="border-top: 1px dashed #000000; padding-top: 128px; padding-bottom: 40px;">
@@ -22,7 +30,11 @@
 
     <div class="flex flex-wrap justify-center gap-8">
       {#each apps as app}
-        <div class="card-item" style="width: 304px; height: 600px; border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; background-image: url('{app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat;">
+        <button 
+          class="card-item"
+          onclick={() => toggleApp(app.key)}
+          style="width: 304px; {expandedApps[app.key] ? 'height: auto; min-height: 600px;' : 'height: 600px;'} border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; {expandedApps[app.key] ? '' : `background-image: url('${app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat;`} cursor: pointer; text-align: left; transition: all 0.3s ease;"
+        >
           <!-- Ikona -->
           {#if app.icon === 'search'}
             <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 16px;">
@@ -43,18 +55,85 @@
           {/if}
 
           <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000; margin-bottom: 8px;">
-            {(m as any)[`quickApps.${app.key}.label`]()}
+            {(m as any)[`quickApps.${app.key}.category`]()}
           </p>
           <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 16px;">
             {(m as any)[`quickApps.${app.key}.title`]()}
           </h3>
-          <a
-            href={(m as any)[`quickApps.${app.key}.link`]()}
-            style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: underline;"
-          >
-            {m['quickApps.linkText']()}
-          </a>
-        </div>
+          <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px;">
+            {(m as any)[`quickApps.${app.key}.subtitle`]()}
+          </p>
+          
+          {#if expandedApps[app.key]}
+            <!-- Rozbalený obsah -->
+            <div class="expanded-content" style="margin-top: 16px; width: 100%;">
+              <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                {(m as any)[`quickApps.${app.key}.expandedText`]()}
+              </p>
+              
+              {#if (m as any)[`quickApps.${app.key}.btn1Text`]}
+                <a
+                  href={(m as any)[`quickApps.${app.key}.btn1Link`]()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {(m as any)[`quickApps.${app.key}.btn1Text`]()}
+                </a>
+              {/if}
+              
+              {#if (m as any)[`quickApps.${app.key}.expandedText2`]}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {(m as any)[`quickApps.${app.key}.expandedText2`]()}
+                </p>
+                
+                {#if (m as any)[`quickApps.${app.key}.btn2Text`]}
+                  <a
+                    href={(m as any)[`quickApps.${app.key}.btn2Link`]()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onclick={(e) => e.stopPropagation()}
+                    class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                    style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                  >
+                    {(m as any)[`quickApps.${app.key}.btn2Text`]()}
+                  </a>
+                {/if}
+              {/if}
+              
+              {#if (m as any)[`quickApps.${app.key}.expandedText3`]}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {(m as any)[`quickApps.${app.key}.expandedText3`]()}
+                </p>
+                
+                {#if (m as any)[`quickApps.${app.key}.btn3Text`]}
+                  <a
+                    href={(m as any)[`quickApps.${app.key}.btn3Link`]()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onclick={(e) => e.stopPropagation()}
+                    class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                    style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                  >
+                    {(m as any)[`quickApps.${app.key}.btn3Text`]()}
+                  </a>
+                {/if}
+              {/if}
+            </div>
+            
+            <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
+              <ChevronUp size={20} />
+              <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Sbalit</span>
+            </div>
+          {:else}
+            <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
+              <ChevronDown size={20} />
+              <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Zobrazit více</span>
+            </div>
+          {/if}
+        </button>
       {/each}
     </div>
   </div>

@@ -42,7 +42,7 @@
 <style>
   .features-section {
     position: relative;
-    background-image: url('/images/bg-hero.jpg');
+    background-image: url('/images/bg-hero.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

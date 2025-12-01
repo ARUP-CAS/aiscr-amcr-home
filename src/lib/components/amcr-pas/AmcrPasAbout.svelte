@@ -9,7 +9,7 @@
       <div class="order-2 lg:order-1">
         <div class="h-full">
           <img
-            src="/images/amcr-pas/bg-amcr-pas-about.png"
+            src="/images/amcr-pas/bg-amcr-pas-about.webp"
             alt={m['amcrPas.about.title']()}
             class="w-full h-full object-cover"
           />

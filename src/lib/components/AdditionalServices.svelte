@@ -25,7 +25,7 @@
 <style>
   .additional-services-section {
     position: relative;
-    background-image: url('/images/bg-additional-services.jpg');
+    background-image: url('/images/bg-additional-services.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

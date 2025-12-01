@@ -2,10 +2,18 @@
   import { FileStack, BookOpen, BookText, Wrench, ChevronDown } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
   
-  let expandedCategory = $state<string | null>(null);
-  
-  function toggleCategory(category: string) {
-    expandedCategory = expandedCategory === category ? null : category;
+  function scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerOffset = 140; // Výška headeru + nějaký padding
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   }
 </script>
 
@@ -28,68 +36,39 @@
           <!-- Základní dokumentace -->
           <div style="border-top: 1px solid #000000; border-bottom: 1px solid #000000;">
             <button
-              onclick={() => toggleCategory('zakladni')}
+              onclick={() => scrollToSection('zakladni-dokumentace')}
               class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <FileStack size={48} color="#000000" />
               <span class="flex-1">Základní dokumentace</span>
-              <ChevronDown 
-                size={24} 
-                color="#000000"
-                class="transform transition-transform {expandedCategory === 'zakladni' ? 'rotate-180' : ''}"
-              />
-            </button>
-          </div>
-
-          <!-- Vzorové dokumenty -->
-          <div style="border-bottom: 1px solid #000000;">
-            <button
-              onclick={() => toggleCategory('vzorove')}
-              class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
-              style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
-            >
-              <BookOpen size={48} color="#000000" />
-              <span class="flex-1">Vzorové dokumenty</span>
-              <ChevronDown 
-                size={24} 
-                color="#000000"
-                class="transform transition-transform {expandedCategory === 'vzorove' ? 'rotate-180' : ''}"
-              />
+              <ChevronDown size={24} color="#000000" />
             </button>
           </div>
 
           <!-- Publikace a materiály -->
           <div style="border-bottom: 1px solid #000000;">
             <button
-              onclick={() => toggleCategory('publikace')}
+              onclick={() => scrollToSection('publikace-materialy')}
               class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <BookText size={48} color="#000000" />
               <span class="flex-1">Publikace a materiály</span>
-              <ChevronDown 
-                size={24} 
-                color="#000000"
-                class="transform transition-transform {expandedCategory === 'publikace' ? 'rotate-180' : ''}"
-              />
+              <ChevronDown size={24} color="#000000" />
             </button>
           </div>
 
           <!-- Data a nástroje -->
           <div style="border-bottom: 1px solid #000000;">
             <button
-              onclick={() => toggleCategory('data')}
+              onclick={() => scrollToSection('data-nastroje')}
               class="flex items-center justify-between w-full text-left hover:bg-gray-50 hover:bg-opacity-20 transition-colors"
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <Wrench size={48} color="#000000" />
               <span class="flex-1">Data a nástroje</span>
-              <ChevronDown 
-                size={24} 
-                color="#000000"
-                class="transform transition-transform {expandedCategory === 'data' ? 'rotate-180' : ''}"
-              />
+              <ChevronDown size={24} color="#000000" />
             </button>
           </div>
         </div>

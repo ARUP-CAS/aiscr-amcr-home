@@ -2,14 +2,23 @@
 	import type { PageData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import { getLocale } from '$lib/paraglide/runtime';
+	import { m } from '$lib/paraglide/messages.js';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+	let currentLocale = $state('cs');
+
+	onMount(() => {
+		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+	});
+
+	function getBasePath(): string {
+		return currentLocale === 'en' ? '/en' : '';
+	}
 
 	function formatDate(dateString: string) {
-		const locale = getLocale();
 		const date = new Date(dateString);
-		return date.toLocaleDateString(locale === 'cs' ? 'cs-CZ' : 'en-US', {
+		return date.toLocaleDateString(currentLocale === 'cs' ? 'cs-CZ' : 'en-US', {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric'
@@ -33,7 +42,7 @@
 			<div class="max-w-content px-4 sm:px-6 lg:px-8">
 				<!-- Zpět na blog -->
 				<a
-					href="/blog"
+					href="{getBasePath()}/blog"
 					class="inline-flex items-center text-primary hover:underline mb-6"
 					style="font-family: 'Roboto', sans-serif; font-size: 16px;"
 				>
@@ -45,7 +54,7 @@
 							d="M15 19l-7-7 7-7"
 						/>
 					</svg>
-					Zpět na blog
+					{m['blog.backToBlog']()}
 				</a>
 
 				<!-- Kategorie a čas čtení -->
@@ -59,7 +68,7 @@
 						</span>
 					{/if}
 					<span class="text-gray-600" style="font-family: 'Roboto', sans-serif;">
-						Čas čtení: {data.post.readingTime}
+						{m['blog.readTime']({ time: data.post.readingTime })}
 					</span>
 				</div>
 
@@ -76,7 +85,7 @@
 					class="text-gray-600"
 					style="font-family: 'Roboto', sans-serif;"
 				>
-					Publikováno {formatDate(data.post.date)}
+					{m['blog.published']()} {formatDate(data.post.date)}
 				</time>
 			</div>
 		</div>
@@ -88,7 +97,7 @@
 					<!-- Sidebar - Autor -->
 					<div class="lg:col-span-1">
 						<div class="bg-gray-50 rounded-lg p-6">
-							<h3 class="font-bold mb-4" style="font-family: 'Roboto', sans-serif;">Autor</h3>
+							<h3 class="font-bold mb-4" style="font-family: 'Roboto', sans-serif;">{m['blog.author']()}</h3>
 							<div class="flex items-start gap-4">
 								{#if data.post.authorImage}
 									<img
@@ -111,7 +120,6 @@
 
 					<!-- Hlavní obsah -->
 					<div class="lg:col-span-2">
-						<!-- Obrázek -->
 						{#if data.post.image}
 							<img
 								src={data.post.image}
@@ -132,4 +140,3 @@
 
 	<Footer />
 </div>
-

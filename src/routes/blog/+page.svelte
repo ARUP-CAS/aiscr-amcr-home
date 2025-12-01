@@ -3,14 +3,22 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { m } from '$lib/paraglide/messages.js';
-	import { getLocale } from '$lib/paraglide/runtime';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+	let currentLocale = $state('cs');
+
+	onMount(() => {
+		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+	});
+
+	function getBlogUrl(slug: string): string {
+		return currentLocale === 'en' ? `/en/blog/${slug}` : `/blog/${slug}`;
+	}
 
 	function formatDate(dateString: string) {
-		const locale = getLocale();
 		const date = new Date(dateString);
-		return date.toLocaleDateString(locale === 'cs' ? 'cs-CZ' : 'en-US', {
+		return date.toLocaleDateString(currentLocale === 'cs' ? 'cs-CZ' : 'en-US', {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric'
@@ -34,14 +42,12 @@
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{#each data.posts as post}
 					<article class="bg-white shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex flex-col" style="padding: 24px;">
-						<!-- Image -->
 						{#if post.image}
 							<div class="overflow-hidden" style="height: 200px; width: 100%; margin-bottom: 16px;">
 								<img src={post.image} alt={post.title} class="w-full h-full object-cover" />
 							</div>
 						{/if}
 
-						<!-- Category badge -->
 						{#if post.category}
 							<div class="mb-3">
 								<span class="bg-primary text-white text-xs px-3 py-1" style="font-family: 'Roboto', sans-serif;">
@@ -50,19 +56,16 @@
 							</div>
 						{/if}
 
-						<!-- Title -->
 						<h2 style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 12px;">
-							<a href="/blog/{post.slug}" class="hover:text-primary transition-colors">
+							<a href={getBlogUrl(post.slug)} class="hover:text-primary transition-colors">
 								{post.title}
 							</a>
 						</h2>
 
-						<!-- Excerpt -->
 						<p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #666; line-height: 1.6; margin-bottom: 16px; flex: 1;">
 							{post.excerpt}
 						</p>
 
-						<!-- Meta -->
 						<div class="text-sm text-gray-500" style="font-family: 'Roboto', sans-serif;">
 							<time datetime={post.date}>{formatDate(post.date)}</time>
 							<span> • </span>
@@ -74,7 +77,7 @@
 
 			{#if data.posts.length === 0}
 				<div class="text-center py-12">
-					<p class="text-gray-500 text-lg">Zatím žádné články</p>
+					<p class="text-gray-500 text-lg">{m['blog.noPosts']()}</p>
 				</div>
 			{/if}
 		</div>
@@ -82,4 +85,3 @@
 
 	<Footer />
 </div>
-
