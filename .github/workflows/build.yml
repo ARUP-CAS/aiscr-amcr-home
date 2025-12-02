@@ -33,13 +33,13 @@ jobs:
       - name: Create ZIP archive
         run: |
           cd build
-          zip -r ../aiscr-home-latest.zip .
+          zip -r ../aiscr-amcr-home-latest.zip .
           cd ..
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: aiscr-home-latest.zip
+          path: aiscr-amcr-home-latest.zip
           retention-days: 90
 

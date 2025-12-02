@@ -21,11 +21,11 @@ jobs:
 
       - name: Rename artifact for release
         run: |
-          mv aiscr-home-latest.zip aiscr-home-${{ github.event.release.tag_name }}.zip
+          mv aiscr-amcr-home-latest.zip aiscr-amcr-home-${{ github.event.release.tag_name }}.zip
 
       - name: Upload ZIP to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: aiscr-home-${{ github.event.release.tag_name }}.zip
+          files: aiscr-amcr-home-${{ github.event.release.tag_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
