@@ -1,19 +1,28 @@
 <script lang="ts">
-  import { Newspaper, ChevronRight } from '@lucide/svelte';
+  import { Newspaper, ChevronRight, ChevronDown, ChevronUp } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
 
-  let currentIndex = $state(0);
+  interface NewsItem {
+    slug: string;
+    title: string;
+    excerpt: string;
+    date: string;
+    time: string;
+    badge: string;
+    image: string;
+  }
 
-  const news = [
-    { key: 'news1' },
-    { key: 'news2' },
-    { key: 'news3' },
-    { key: 'news4' },
-    { key: 'news5' }
-  ];
+  interface Props {
+    news?: NewsItem[];
+  }
+
+  let { news = [] }: Props = $props();
+
+  let currentIndex = $state(0);
+  let expandedItems = $state<Record<string, boolean>>({});
 
   const itemsPerPage = 3;
-  const totalPages = Math.ceil(news.length / itemsPerPage);
+  const totalPages = $derived(Math.ceil(news.length / itemsPerPage));
 
   const visibleNews = $derived(
     news.slice(currentIndex * itemsPerPage, (currentIndex + 1) * itemsPerPage)
@@ -29,6 +38,26 @@
     if (currentIndex > 0) {
       currentIndex--;
     }
+  }
+
+  function toggleExpand(slug: string) {
+    expandedItems[slug] = !expandedItems[slug];
+  }
+
+  function truncateText(text: string, maxLength: number = 80): { text: string; isTruncated: boolean } {
+    if (text.length <= maxLength) {
+      return { text, isTruncated: false };
+    }
+    return { text: text.slice(0, maxLength) + '...', isTruncated: true };
+  }
+
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('cs-CZ', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric'
+    });
   }
 </script>
 
@@ -52,24 +81,54 @@
     <!-- Karty -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {#each visibleNews as item}
-        <article class="hover:shadow-lg transition-shadow" style="background-color: rgba(255, 255, 255, 0.8); padding: 24px; max-height: 415px; display: flex; flex-direction: column;">
-          <span class="inline-block bg-primary" style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px; padding: 6px 12px; width: fit-content;">
-            {(m as any)[`news.${item.key}.badge`]()}
-          </span>
-          <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 12px;">
-            {(m as any)[`news.${item.key}.title`]()}
-          </h3>
-          <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.6; margin-bottom: 16px;">
-            {(m as any)[`news.${item.key}.excerpt`]()}
-          </p>
-          <a
-            href={(m as any)[`news.${item.key}.link`]()}
-            class="inline-flex items-center hover:underline"
-            style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: none; gap: 4px;"
-          >
-            <span>{m['news.readMore']()}</span>
-            <ChevronRight size={16} />
-          </a>
+        {@const { text: displayText, isTruncated } = truncateText(item.excerpt)}
+        <article class="hover:shadow-lg transition-shadow overflow-hidden" style="background-color: rgba(255, 255, 255, 0.8); display: flex; flex-direction: column;">
+          <!-- Obrázek - skryt -->
+          {#if false}
+            <div class="aspect-video overflow-hidden">
+              <img 
+                src={item.image} 
+                alt={item.title} 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          {/if}
+          
+          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+            <!-- Časová známka -->
+            <div class="flex items-center gap-2 mb-3" style="font-family: 'Roboto', sans-serif; font-size: 12px; color: #666;">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{formatDate(item.date)} • {item.time}</span>
+            </div>
+            
+            <span class="inline-block bg-primary" style="font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 700; color: #FFFFFF; margin-bottom: 16px; padding: 6px 12px; width: fit-content;">
+              {item.badge}
+            </span>
+            <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px;">
+              <a href="/aktuality/{item.slug}" class="hover:text-primary transition-colors" style="color: #000000; text-decoration: none;">
+                {item.title}
+              </a>
+            </h3>
+            <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; line-height: 1.6; margin-bottom: 16px; flex: 1;">
+              {expandedItems[item.slug] ? item.excerpt : displayText}
+            </p>
+            {#if isTruncated}
+              <button
+                onclick={() => toggleExpand(item.slug)}
+                class="inline-flex items-center hover:underline"
+                style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: none; gap: 4px; background: none; border: none; padding: 0; cursor: pointer;"
+              >
+                <span>{expandedItems[item.slug] ? m['news.readLess']() : m['news.readMore']()}</span>
+                {#if expandedItems[item.slug]}
+                  <ChevronUp size={16} />
+                {:else}
+                  <ChevronDown size={16} />
+                {/if}
+              </button>
+            {/if}
+          </div>
         </article>
       {/each}
     </div>
@@ -103,7 +162,7 @@
 <style>
   .news-section {
     position: relative;
-    background-image: url('/images/bg-news.png');
+    background-image: url('/images/bg-news.webp');
     background-size: 1312px auto;
     background-position: center top;
     background-repeat: no-repeat;

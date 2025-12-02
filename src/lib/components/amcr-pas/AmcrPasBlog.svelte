@@ -1,57 +1,54 @@
 <script lang="ts">
-	// Preview nejnovějších blog postů
-	import { resolve } from '$app/paths';
+	// Preview nejnovějších blog postů - SYNCHRONNÍ NAČTENÍ pro prerender
 	import { Shovel, ArrowLeft, ArrowRight } from '@lucide/svelte';
 	import { m } from '$lib/paraglide/messages.js';
-	import { getLocale } from '$lib/paraglide/runtime';
+	import { onMount } from 'svelte';
 	
-	let blogPosts = $state<any[]>([]);
+	// Synchronní načtení při SSR/prerender
+	const allModules = import.meta.glob('/src/content/blog/*.md', { eager: true });
 	
-	$effect(() => {
-		try {
-			const locale = getLocale();
-			const allModules = import.meta.glob('/src/content/blog/*.md', { eager: true });
+	const posts = Object.entries(allModules)
+		.map(([path, module]) => {
+			const { metadata } = module as any;
+			const fileName = path.split('/').pop() || '';
+			const slug = fileName.replace(/\.(cs|en)\.md$/, '').replace(/\.md$/, '');
 			
-			console.log('Loaded modules:', Object.keys(allModules));
-			
-			const posts = Object.entries(allModules)
-				.map(([path, module]) => {
-					const { metadata } = module as any;
-					const fileName = path.split('/').pop() || '';
-					const slug = fileName.replace(/\.(cs|en)\.md$/, '').replace(/\.md$/, '');
-					
-					return {
-						slug,
-						title: metadata?.title || 'Bez názvu',
-						excerpt: metadata?.excerpt || '',
-						date: metadata?.date || new Date().toISOString().split('T')[0],
-						category: metadata?.category || '',
-						published: metadata?.published !== false,
-						locale: metadata?.locale || 'cs',
-						categoryColor: metadata?.category === 'Objevy' || metadata?.category === 'Discoveries' ? 'bg-purple-600' : 
-									   metadata?.category === 'Technologie' || metadata?.category === 'Technology' ? 'bg-blue-600' : 'bg-green-600',
-						author: metadata?.author || 'AIS CR Team',
-						authorRole: metadata?.authorRole || '',
-						authorImage: metadata?.authorImage || '',
-						image: metadata?.image || '/images/blog/placeholder.png',
-						readTime: metadata?.readingTime || (locale === 'cs' ? '5 minut' : '5 minutes')
-					};
-				})
-				.filter(post => post.published && post.locale === locale)
-				.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-				.slice(0, 3);
-			
-			console.log('Filtered posts:', posts);
-			blogPosts = posts;
-		} catch (err) {
-			console.error('Error loading blog posts:', err);
-		}
+			return {
+				slug,
+				title: metadata?.title || 'Bez názvu',
+				excerpt: metadata?.excerpt || '',
+				date: metadata?.date || new Date().toISOString().split('T')[0],
+				category: metadata?.category || '',
+				published: metadata?.published !== false,
+				locale: metadata?.locale || 'cs',
+				categoryColor: metadata?.category === 'Objevy' || metadata?.category === 'Discoveries' ? 'bg-purple-600' : 
+							   metadata?.category === 'Technologie' || metadata?.category === 'Technology' ? 'bg-blue-600' : 'bg-green-600',
+				author: metadata?.author || 'AIS CR Team',
+				authorRole: metadata?.authorRole || '',
+				authorImage: metadata?.authorImage || '',
+				image: metadata?.image || '/images/blog/placeholder.webp',
+				readTime: metadata?.readingTime || '5 minut'
+			};
+		})
+		.filter(post => post.published)
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+		.slice(0, 3);
+	
+	let blogPosts = $state<any[]>(posts);
+	let currentLocale = $state('cs');
+
+	// Detekce locale pro správné odkazy
+	onMount(() => {
+		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
 	});
 
+	function getBlogUrl(slug: string): string {
+		return currentLocale === 'en' ? `/en/blog/${slug}` : `/blog/${slug}`;
+	}
+
 	function formatDate(dateString: string) {
-		const locale = getLocale();
 		const date = new Date(dateString);
-		return date.toLocaleDateString(locale === 'cs' ? 'cs-CZ' : 'en-US', {
+		return date.toLocaleDateString(currentLocale === 'cs' ? 'cs-CZ' : 'en-US', {
 			day: 'numeric',
 			month: 'long',
 			year: 'numeric'
@@ -65,17 +62,14 @@
 	function updateScrollButtons() {
 		if (!scrollContainer) return;
 		
-		const scrollLeft = scrollContainer.scrollLeft;
+		const scrollLeftPos = scrollContainer.scrollLeft;
 		const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
 		
-		canScrollLeft = scrollLeft > 5; // malá tolerance
-		canScrollRight = scrollLeft < maxScroll - 5; // malá tolerance
-		
-		console.log('Scroll update:', { scrollLeft, maxScroll, canScrollLeft, canScrollRight });
+		canScrollLeft = scrollLeftPos > 5;
+		canScrollRight = scrollLeftPos < maxScroll - 5;
 	}
 
 	$effect(() => {
-		// Vícenásobné pokusy o inicializaci
 		const initButtons = () => {
 			if (scrollContainer) {
 				updateScrollButtons();
@@ -85,7 +79,6 @@
 			return false;
 		};
 		
-		// Zkusíme hned, pak s delayem
 		if (!initButtons()) {
 			setTimeout(() => {
 				if (!initButtons()) {
@@ -103,20 +96,20 @@
 
 	function scrollLeft() {
 		if (!canScrollLeft || !scrollContainer) return;
-		const cardWidth = 414; // 390px karta + 24px gap
+		const cardWidth = 414;
 		scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
 		setTimeout(updateScrollButtons, 500);
 	}
 
 	function scrollRight() {
 		if (!canScrollRight || !scrollContainer) return;
-		const cardWidth = 414; // 390px karta + 24px gap
+		const cardWidth = 414;
 		scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
 		setTimeout(updateScrollButtons, 500);
 	}
 </script>
 
-<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px;">
+<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px; display: none;">
 	<div class="w-full px-4 sm:px-6 lg:px-8" style="max-width: 1312px; margin: 0 auto;">
 		
 		<!-- Header with icon -->
@@ -125,24 +118,15 @@
 				<Shovel size="63" color="#721C17" />
 			</div>
 			<h2 class="font-bold mb-4" style="font-family: 'Roboto Slab', serif; color: #721C17; font-size: 48px;">
-				Když spolupráce funguje
+				{m['amcrPas.blog.title']()}
 			</h2>
 			<p class="text-base text-gray-700 max-w-4xl mx-auto leading-relaxed" style="font-family: 'Roboto', sans-serif; font-weight: 400;">
-				Zkušenosti těch, kteří dokazují, že archeologie a detektoring mohou jít ruku v ruce.
+				{m['amcrPas.blog.subtitle']()}
 			</p>
 		</div>
 
-		<!-- Debug info -->
-		{#if blogPosts.length === 0}
-			<div class="text-center py-12 bg-gray-100 rounded-lg mb-8">
-				<p class="text-gray-600">Načítání článků... (pokud se nic nezobrazí, zkontrolujte konzoli)</p>
-				<p class="text-sm text-gray-500 mt-2">Debug: {Object.keys(import.meta.glob('/src/content/blog/*.md', { eager: true })).length} souborů nalezeno</p>
-			</div>
-		{/if}
-
 		<!-- Scrollable cards container -->
 		<div class="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
-			<!-- Scrollable cards -->
 			<div 
 				bind:this={scrollContainer}
 				class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide px-4 sm:px-6 lg:px-8"
@@ -151,32 +135,27 @@
 			>
 				{#each blogPosts as post}
 					<article class="flex-none bg-white shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex flex-col" style="scroll-snap-align: start; width: 390px; height: 629px; padding: 24px;">
-						<!-- Image -->
 						<div class="overflow-hidden" style="height: 300px; width: 100%;">
 							<img src={post.image} alt={post.title} class="w-full h-full object-cover" />
 						</div>
 						
 						<div class="flex flex-col flex-1" style="margin-top: 24px;">
-							<!-- Category badge -->
 							<div class="mb-3">
 								<span class="text-white text-xs px-3 py-1 {post.categoryColor}" style="font-family: 'Roboto', sans-serif;">
 									{post.category}
 								</span>
 							</div>
 							
-						<!-- Title -->
-						<h3 class="text-xl font-semibold text-gray-900 mb-3 leading-tight" style="font-family: 'Roboto', sans-serif;">
-							<a href={resolve(`/blog/${post.slug}`)} class="hover:text-red-600 transition-colors">
-								{post.title}
-							</a>
-						</h3>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3 leading-tight" style="font-family: 'Roboto', sans-serif;">
+								<a href={getBlogUrl(post.slug)} class="hover:text-red-600 transition-colors">
+									{post.title}
+								</a>
+							</h3>
 							
-							<!-- Excerpt -->
 							<p class="text-gray-600 leading-relaxed mb-6 text-sm flex-1" style="font-family: 'Roboto', sans-serif;">
 								{post.excerpt}
 							</p>
 							
-							<!-- Author and meta info - always at bottom -->
 							<div class="flex items-start space-x-3 mt-auto" style="font-family: 'Roboto', sans-serif;">
 								{#if post.authorImage}
 									<img src={post.authorImage} alt={post.author} class="rounded-full flex-shrink-0 object-cover" style="width: 48px; height: 48px;" />
@@ -198,12 +177,12 @@
 			</div>
 		</div>
 
-		<!-- Navigation buttons moved below -->
 		<div class="flex justify-end space-x-3">
 			<button 
 				onclick={scrollLeft}
 				class="bg-white rounded-full p-3 shadow-md transition-shadow {canScrollLeft ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'}"
 				disabled={!canScrollLeft}
+				aria-label="Předchozí"
 			>
 				<ArrowLeft size="20" color={canScrollLeft ? "#666" : "#ccc"} />
 			</button>
@@ -212,6 +191,7 @@
 				onclick={scrollRight}
 				class="bg-white rounded-full p-3 shadow-md transition-shadow {canScrollRight ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'}"
 				disabled={!canScrollRight}
+				aria-label="Další"
 			>
 				<ArrowRight size="20" color={canScrollRight ? "#666" : "#ccc"} />
 			</button>
@@ -222,13 +202,12 @@
 
 <style>
 	.blog-section {
-		background-image: url('/images/amcr-pas/bg-amcr-pas-blog.png');
+		background-image: url('/images/amcr-pas/bg-amcr-pas-blog.webp');
 		background-size: 1312px auto;
 		background-position: center top;
 		background-repeat: no-repeat;
 	}
 	
-	/* Schovat pozadí na mobilech */
 	@media (max-width: 768px) {
 		.blog-section {
 			background-image: none;

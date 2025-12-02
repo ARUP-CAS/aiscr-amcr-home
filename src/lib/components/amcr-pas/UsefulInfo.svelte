@@ -3,10 +3,10 @@
   import { m } from '$lib/paraglide/messages.js';
 
   const items = [
-    { key: 'item1', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-1.png' },
-    { key: 'item2', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-2.png' },
-    { key: 'item3', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-3.png' },
-    { key: 'item4', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-4.png' }
+    { key: 'item1', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-1.webp' },
+    { key: 'item2', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-2.webp' },
+    { key: 'item3', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-3.webp' },
+    { key: 'item4', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-4.webp' }
   ];
 </script>
 

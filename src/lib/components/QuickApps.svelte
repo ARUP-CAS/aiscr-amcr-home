@@ -1,28 +1,40 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { ChevronDown, ChevronUp } from '@lucide/svelte';
 
   const apps = [
-    { key: 'app1', icon: 'search', bgImage: '/images/bg-quick-select-1.png' },
-    { key: 'app2', icon: 'map', bgImage: '/images/bg-quick-select-2.png' },
-    { key: 'app3', icon: 'database', bgImage: '/images/bg-quick-select-3.png' },
-    { key: 'app4', icon: 'file', bgImage: '/images/bg-quick-select-4.png' }
+    { key: 'app1', icon: 'search', bgImage: '/images/bg-quick-select-1.webp' },
+    { key: 'app2', icon: 'map', bgImage: '/images/bg-quick-select-2.webp' },
+    { key: 'app3', icon: 'database', bgImage: '/images/bg-quick-select-3.webp' },
+    { key: 'app4', icon: 'file', bgImage: '/images/bg-quick-select-4.webp' }
   ];
+  
+  // Sledování rozbalených aplikací
+  let expandedApps = $state<Record<string, boolean>>({});
+  
+  function toggleApp(appKey: string) {
+    expandedApps[appKey] = !expandedApps[appKey];
+  }
 </script>
 
 <section id="aplikace" class="px-4 sm:px-6 lg:px-8 bg-gray-50" style="border-top: 1px dashed #000000; padding-top: 128px; padding-bottom: 40px;">
   <div class="max-w-content">
     <div class="text-center">
       <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000; margin-bottom: 16px;">
-        Rychlý výběr
+        {m['quickApps.label']()}
       </p>
       <h2 style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: var(--color-primary); margin-bottom: 80px;">
-        Vyberte si nástroj podle svých potřeb
+        {m['quickApps.title']()}
       </h2>
     </div>
 
     <div class="flex flex-wrap justify-center gap-8">
       {#each apps as app}
-        <div class="card-item" style="width: 304px; height: 600px; border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; background-image: url('{app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat;">
+        <button 
+          class="card-item"
+          onclick={() => toggleApp(app.key)}
+          style="width: 304px; {expandedApps[app.key] ? 'height: auto; min-height: 600px;' : 'height: 600px;'} border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; {expandedApps[app.key] ? '' : `background-image: url('${app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat;`} cursor: pointer; text-align: left; transition: all 0.3s ease;"
+        >
           <!-- Ikona -->
           {#if app.icon === 'search'}
             <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 16px;">
@@ -43,18 +55,112 @@
           {/if}
 
           <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000; margin-bottom: 8px;">
-            {(m as any)[`quickApps.${app.key}.label`]()}
+            {(m as any)[`quickApps.${app.key}.category`]()}
           </p>
           <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 16px;">
             {(m as any)[`quickApps.${app.key}.title`]()}
           </h3>
-          <a
-            href={(m as any)[`quickApps.${app.key}.link`]()}
-            style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; color: #000000; text-decoration: underline;"
-          >
-            {m['quickApps.linkText']()}
-          </a>
-        </div>
+          <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px;">
+            {(m as any)[`quickApps.${app.key}.subtitle`]()}
+          </p>
+          
+          {#if expandedApps[app.key]}
+            {@const expandedTextFn = (m as any)[`quickApps.${app.key}.expandedText`]}
+            {@const btn1TextFn = (m as any)[`quickApps.${app.key}.btn1Text`]}
+            {@const btn1LinkFn = (m as any)[`quickApps.${app.key}.btn1Link`]}
+            {@const expandedText2Fn = (m as any)[`quickApps.${app.key}.expandedText2`]}
+            {@const btn2TextFn = (m as any)[`quickApps.${app.key}.btn2Text`]}
+            {@const btn2LinkFn = (m as any)[`quickApps.${app.key}.btn2Link`]}
+            {@const expandedText3Fn = (m as any)[`quickApps.${app.key}.expandedText3`]}
+            {@const btn3TextFn = (m as any)[`quickApps.${app.key}.btn3Text`]}
+            {@const btn3LinkFn = (m as any)[`quickApps.${app.key}.btn3Link`]}
+            {@const btnTextFn = (m as any)[`quickApps.${app.key}.btnText`]}
+            {@const btnLinkFn = (m as any)[`quickApps.${app.key}.btnLink`]}
+            <!-- Rozbalený obsah -->
+            <div class="expanded-content" style="margin-top: 16px; width: 100%;">
+              
+              {#if expandedTextFn && typeof expandedTextFn === 'function'}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {expandedTextFn()}
+                </p>
+              {/if}
+              
+              {#if btn1TextFn && typeof btn1TextFn === 'function'}
+                <a
+                  href={btn1LinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btn1TextFn()}
+                </a>
+              {/if}
+              
+              {#if expandedText2Fn && typeof expandedText2Fn === 'function'}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {expandedText2Fn()}
+                </p>
+              {/if}
+              
+              {#if btn2TextFn && typeof btn2TextFn === 'function'}
+                <a
+                  href={btn2LinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btn2TextFn()}
+                </a>
+              {/if}
+              
+              {#if expandedText3Fn && typeof expandedText3Fn === 'function'}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {expandedText3Fn()}
+                </p>
+              {/if}
+              
+              {#if btn3TextFn && typeof btn3TextFn === 'function'}
+                <a
+                  href={btn3LinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btn3TextFn()}
+                </a>
+              {/if}
+              
+              {#if btnTextFn && typeof btnTextFn === 'function'}
+                <a
+                  href={btnLinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btnTextFn()}
+                </a>
+              {/if}
+            </div>
+            
+            <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
+              <ChevronUp size={20} />
+              <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Sbalit</span>
+            </div>
+          {:else}
+            <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
+              <ChevronDown size={20} />
+              <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Zobrazit více</span>
+            </div>
+          {/if}
+        </button>
       {/each}
     </div>
   </div>

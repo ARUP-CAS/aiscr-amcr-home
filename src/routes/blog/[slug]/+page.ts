@@ -1,62 +1,58 @@
 import { error } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
-import { getLocale } from '$lib/paraglide/runtime';
+import type { PageLoad, EntryGenerator } from './$types';
+
+// Entries pro prerender - generuje URL pro všechny články v obou jazycích
+export const entries: EntryGenerator = async () => {
+	const modules = import.meta.glob('/src/content/blog/*.md', { eager: true });
+
+	const slugs = Object.entries(modules).map(([_path, module]) => {
+		const { metadata } = module as any;
+		return { slug: metadata.slug };
+	});
+
+	return slugs;
+};
 
 export const load: PageLoad = async ({ params }) => {
 	try {
-		const locale = getLocale();
+		// Načti všechny články
+		const modules = import.meta.glob('/src/content/blog/*.md', { eager: true });
 
-		// Načíst všechny markdown soubory
-		const modules = import.meta.glob('/src/content/blog/*.md', {
-			eager: true
-		});
-
-		// Transformovat na array s metadaty
+		// Vytvoř pole článků s metadaty
 		const allArticles = Object.entries(modules).map(([path, module]) => ({
 			path,
 			module,
 			metadata: (module as any).metadata
 		}));
 
-		// Najít článek podle slug A locale
-		const article = allArticles.find(
-			(a) => a.metadata.slug === params.slug && a.metadata.locale === locale
-		);
+		// Najdi článek podle slug z URL parametru
+		const article = allArticles.find((a) => a.metadata.slug === params.slug);
 
-		// Pokud nenalezen = 404
 		if (!article) {
-			throw error(404, 'Článek nenalezen');
+			throw error(404, 'Blog post nenalezen');
 		}
 
-		// Extrahovat metadata a obsah
+		// Extrahuj metadata a content
 		const { metadata, default: content } = article.module as any;
 
-		// Najít dostupné jazykové verze
-		const availableLocales = allArticles
-			.filter((a) => a.metadata.slug === params.slug)
-			.map((a) => a.metadata.locale);
-
-		// Vrátit data
+		// Vrať data do komponenty
 		return {
 			post: {
-				title: metadata.title,
-				excerpt: metadata.excerpt,
-				date: metadata.date,
-				category: metadata.category,
-				locale: metadata.locale,
-				readingTime: metadata.readingTime,
-				author: metadata.author,
-				authorRole: metadata.authorRole,
-				authorImage: metadata.authorImage,
-				image: metadata.image,
-				slug: metadata.slug,
-				content // Svelte komponenta s obsahem
-			},
-			availableLocales
+				title: metadata.title || 'Bez názvu',
+				excerpt: metadata.excerpt || '',
+				date: metadata.date || new Date().toISOString().split('T')[0],
+				category: metadata.category || '',
+				slug: params.slug,
+				readingTime: metadata.readingTime || '5 minut',
+				author: metadata.author || 'AIS CR',
+				authorRole: metadata.authorRole || 'Archeologický informační systém',
+				authorImage: metadata.authorImage || '/images/people/ais-staff.png',
+				image: metadata.image || '/images/blog/placeholder.webp',
+				content // ← Render funkce!
+			}
 		};
 	} catch (err) {
 		console.error('Error loading blog post:', err);
-		throw error(404, 'Článek nenalezen');
+		throw error(404, 'Blog post nenalezen');
 	}
 };
-
