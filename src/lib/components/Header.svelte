@@ -8,6 +8,8 @@
   let currentLocale = $state('cs');
   let isDropdownOpen = $state(false);
   let isMobileMenuOpen = $state(false);
+  let dropdownButton: HTMLButtonElement | null = $state(null);
+  let dropdownPosition = $state({ top: 0, right: 0 });
   
   // Helper pro locale-aware odkazy
   function getBasePath(): string {
@@ -51,6 +53,33 @@
     };
   });
   
+  // Blokovat scroll když je mobilní menu otevřené
+  $effect(() => {
+    if (typeof document !== 'undefined') {
+      if (isMobileMenuOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+    
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = '';
+      }
+    };
+  });
+  
+  // Výpočet aktuální výšky headeru
+  const currentHeaderHeight = $derived(() => {
+    if (typeof window === 'undefined') return 120;
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      return isScrolled ? 60 : 80;
+    }
+    return isScrolled ? 60 : 120;
+  });
+  
   // Optimalizovaný scroll handler s requestAnimationFrame
   $effect(() => {
     let ticking = false;
@@ -79,16 +108,16 @@
 
 <header class="header fixed top-0 left-0 right-0 z-50 bg-primary shadow-md {isScrolled ? 'header-scrolled' : ''}">
   <div class="max-w-content px-4 sm:px-6 lg:px-8 h-full">
-    <div class="flex items-center justify-between h-full">
+    <div class="flex items-center justify-between h-full w-full">
       <!-- Logo vlevo -->
-      <div class="flex items-center">
+      <div class="flex items-center flex-shrink-0">
         <a href={currentLocale === 'en' ? '/en' : '/'} class="flex items-center">
           <img src="/images/logos/header-logo.svg" alt="AIS ČR Logo" class="logo" />
         </a>
       </div>
 
-      <!-- Navigation a tlačítka vpravo -->
-      <div class="hidden lg:flex items-center" style="gap: 32px;">
+      <!-- Navigation a tlačítka vpravo - DESKTOP -->
+      <div class="hidden lg:flex items-center flex-1 justify-end" style="gap: 32px;">
         <nav class="flex items-center" style="gap: 32px;">
           <a 
             href="https://amcr-help.aiscr.cz/amcr/" 
@@ -141,9 +170,19 @@
         </button>
 
         <!-- Dropdown Přejít do aplikace -->
-        <div class="relative dropdown-container">
+        <div class="dropdown-container">
           <button
-            onclick={() => isDropdownOpen = !isDropdownOpen}
+            bind:this={dropdownButton}
+            onclick={(e) => {
+              isDropdownOpen = !isDropdownOpen;
+              if (isDropdownOpen && dropdownButton) {
+                const rect = dropdownButton.getBoundingClientRect();
+                dropdownPosition = {
+                  top: rect.bottom + 8,
+                  right: window.innerWidth - rect.right
+                };
+              }
+            }}
             class="text-white border border-white hover:bg-white hover:text-primary transition-colors inline-flex items-center justify-center"
             style="height: 40px; padding: 0 16px; font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif; gap: 8px;"
           >
@@ -152,44 +191,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          
-          {#if isDropdownOpen}
-            <div class="absolute right-0 mt-2 w-64 bg-white shadow-lg border border-gray-200 z-50">
-              <a
-                href="https://amcr.aiscr.cz/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors"
-                style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-              >
-                AMČR
-              </a>
-              <a
-                href="https://digiarchiv.aiscr.cz/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-t border-gray-200"
-                style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-              >
-                Digitální archiv AMČR
-              </a>
-              <a
-                href="https://api.aiscr.cz/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-t border-gray-200"
-                style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-              >
-                AMČR API
-              </a>
-            </div>
-          {/if}
         </div>
       </div>
 
       <!-- Mobile menu button -->
       <button 
-        class="lg:hidden p-2 text-white hover:text-gray-200" 
+        class="lg:hidden p-2 text-white hover:text-gray-200 relative z-50" 
         aria-label="Otevřít menu"
         onclick={() => isMobileMenuOpen = !isMobileMenuOpen}
       >
@@ -205,17 +212,58 @@
       </button>
     </div>
   </div>
+</header>
+
+<!-- Dropdown menu - portal mimo header s vysokým z-index -->
+{#if isDropdownOpen}
+  <div 
+    class="fixed w-64 bg-white shadow-lg border border-gray-200"
+    style="top: {dropdownPosition.top}px; right: {dropdownPosition.right}px; z-index: 9999;"
+  >
+    <a
+      href="https://amcr.aiscr.cz/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors"
+      style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+      onclick={() => isDropdownOpen = false}
+    >
+      AMČR
+    </a>
+    <a
+      href="https://digiarchiv.aiscr.cz/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-t border-gray-200"
+      style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+      onclick={() => isDropdownOpen = false}
+    >
+      Digitální archiv AMČR
+    </a>
+    <a
+      href="https://api.aiscr.cz/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-t border-gray-200"
+      style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+      onclick={() => isDropdownOpen = false}
+    >
+      AMČR API
+    </a>
+  </div>
+{/if}
   
-  <!-- Mobile menu -->
+  <!-- Mobile menu overlay -->
   {#if isMobileMenuOpen}
-    <div class="lg:hidden bg-primary border-t border-white/20">
-      <nav class="px-4 py-4 space-y-3">
+    <div class="lg:hidden fixed inset-0 bg-primary z-40" style="top: {currentHeaderHeight()}px;">
+      <nav class="px-4 py-4 space-y-3 h-full overflow-y-auto pb-20">
         <a 
           href="https://amcr-help.aiscr.cz/amcr/" 
           target="_blank"
           rel="noopener noreferrer"
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
+          onclick={() => isMobileMenuOpen = false}
         >
           {m['nav.help']()}
         </a>
@@ -231,6 +279,7 @@
           href="{getBasePath()}/amcr-pas" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
+          onclick={() => isMobileMenuOpen = false}
         >
           {m['nav.amcrPas']()}
         </a>
@@ -238,6 +287,7 @@
           href="{getBasePath()}/downloads" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
+          onclick={() => isMobileMenuOpen = false}
         >
           {m['nav.downloads']()}
         </a>
@@ -262,39 +312,46 @@
           </button>
         </div>
         
-        <div class="pt-2 space-y-2">
-          <a
-            href="https://amcr.aiscr.cz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block text-white hover:text-gray-200 transition-colors py-2 pl-4"
-            style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-          >
-            AMČR
-          </a>
-          <a
-            href="https://digiarchiv.aiscr.cz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block text-white hover:text-gray-200 transition-colors py-2 pl-4"
-            style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-          >
-            Digitální archiv AMČR
-          </a>
-          <a
-            href="https://api.aiscr.cz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block text-white hover:text-gray-200 transition-colors py-2 pl-4"
-            style="font-size: 14px; font-family: 'Roboto', sans-serif;"
-          >
-            AMČR API
-          </a>
+        <div class="border-t border-white/20 pt-3 mt-3">
+          <div class="text-white text-sm mb-3 font-bold" style="font-family: 'Roboto', sans-serif;">
+            {m['nav.appLogin']()}
+          </div>
+          <div class="space-y-1">
+            <a
+              href="https://amcr.aiscr.cz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block text-white hover:text-gray-200 transition-colors py-2"
+              style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+              onclick={() => isMobileMenuOpen = false}
+            >
+              AMČR
+            </a>
+            <a
+              href="https://digiarchiv.aiscr.cz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block text-white hover:text-gray-200 transition-colors py-2"
+              style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+              onclick={() => isMobileMenuOpen = false}
+            >
+              Digitální archiv AMČR
+            </a>
+            <a
+              href="https://api.aiscr.cz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block text-white hover:text-gray-200 transition-colors py-2"
+              style="font-size: 14px; font-family: 'Roboto', sans-serif;"
+              onclick={() => isMobileMenuOpen = false}
+            >
+              AMČR API
+            </a>
+          </div>
         </div>
       </nav>
     </div>
   {/if}
-</header>
 
 <style>
   /* Header - normální stav */

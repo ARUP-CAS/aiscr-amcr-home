@@ -47,10 +47,12 @@
               </p>
               <a
                 href={(m as any)[`tools.${tool.key}.link`]()}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="inline-block bg-white text-black hover:bg-gray-50 transition-colors"
                 style="padding: 12px 24px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; text-decoration: none;"
               >
-                Vstoupit
+                {(m as any)[`tools.${tool.key}.btnText`]()}
               </a>
             </div>
           {:else}
@@ -64,10 +66,12 @@
               </p>
               <a
                 href={(m as any)[`tools.${tool.key}.link`]()}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="inline-block bg-white text-black hover:bg-gray-50 transition-colors"
                 style="padding: 12px 24px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; text-decoration: none;"
               >
-                Vstoupit
+                {(m as any)[`tools.${tool.key}.btnText`]()}
               </a>
             </div>
             <!-- Obrázek vpravo -->

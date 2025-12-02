@@ -23,10 +23,10 @@
       <!-- Levý sloupec -->
       <div class="flex flex-col">
         <h1 class="hero-title" style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 48px; line-height: 1.2; text-align: left;">
-          Ke stažení / odkazy
+          {m['downloads.hero.title']()}
         </h1>
         <p class="hero-subtitle" style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 400; color: #000000; margin-bottom: 48px; text-align: left; line-height: 1.6;">
-          Zde si můžete stáhnout užitečné dokumenty, soubory a aplikace, které Vám umožní blíže se seznámit s AMČR a užívaným popisným systémem. Zároveň zde naleznete odkazy na další užitečné související zdroje.
+          {m['downloads.hero.subtitle']()}
         </p>
       </div>
 
@@ -41,7 +41,7 @@
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <FileStack size={48} color="#000000" />
-              <span class="flex-1">Základní dokumentace</span>
+              <span class="flex-1">{m['downloadsPage.downloads.cat1.title']()}</span>
               <ChevronDown size={24} color="#000000" />
             </button>
           </div>
@@ -54,7 +54,7 @@
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <BookText size={48} color="#000000" />
-              <span class="flex-1">Publikace a materiály</span>
+              <span class="flex-1">{m['downloadsPage.downloads.cat2.title']()}</span>
               <ChevronDown size={24} color="#000000" />
             </button>
           </div>
@@ -67,7 +67,7 @@
               style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; padding: 16px 0; gap: 16px;"
             >
               <Wrench size={48} color="#000000" />
-              <span class="flex-1">Data a nástroje</span>
+              <span class="flex-1">{m['downloadsPage.downloads.cat3.title']()}</span>
               <ChevronDown size={24} color="#000000" />
             </button>
           </div>

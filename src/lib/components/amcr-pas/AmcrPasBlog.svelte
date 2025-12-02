@@ -109,7 +109,7 @@
 	}
 </script>
 
-<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px;">
+<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px; display: none;">
 	<div class="w-full px-4 sm:px-6 lg:px-8" style="max-width: 1312px; margin: 0 auto;">
 		
 		<!-- Header with icon -->

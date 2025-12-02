@@ -44,7 +44,7 @@
   const categories = getCategoriesForPrefix(prefix);
 </script>
 
-<section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'bg-white'}" style="padding-top: 80px; padding-bottom: 80px;">
+<section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'downloads-main'}" style="padding-top: 80px; padding-bottom: 80px;">
   <div class="max-w-content">
     <h2 class="font-bold mb-12 text-center" style="font-family: 'Roboto Slab', serif; font-size: 48px; color: var(--color-primary);">
       {(m as any)[`${prefix}.downloads.title`]()}
@@ -68,8 +68,10 @@
               {@const descFn = (m as any)[descKey]}
               {@const fileFn = (m as any)[fileKey]}
               {@const typeFn = (m as any)[typeKey]}
+              {@const isLink = typeFn && typeFn() === 'link'}
+              {@const visitLabelFn = (m as any)[`${prefix}.downloads.visitLabel`]}
+              {@const downloadLabelFn = (m as any)[`${prefix}.downloads.downloadLabel`]}
               {#if titleFn && descFn && fileFn}
-                {@const isLink = typeFn && typeFn() === 'link'}
                 <div class="flex items-center justify-between bg-white hover:bg-gray-50 transition-colors" style="padding: 16px; border: 1px solid #000000;">
                   <div class="flex items-start space-x-4 flex-1">
                     <!-- Ikona dokumentu nebo globe -->
@@ -101,7 +103,7 @@
                       class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
                       style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
                     >
-                      <span>přejít</span>
+                      <span>{visitLabelFn && typeof visitLabelFn === 'function' ? visitLabelFn() : 'Visit'}</span>
                       <ExternalLink size={16} color="#000000" />
                     </a>
                   {:else}
@@ -111,7 +113,7 @@
                       class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
                       style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
                     >
-                      <span>stáhnout</span>
+                      <span>{downloadLabelFn()}</span>
                       <Download size={16} color="#000000" />
                     </a>
                   {/if}
@@ -126,7 +128,8 @@
 </section>
 
 <style>
-  .downloads-amcr-pas {
+  .downloads-amcr-pas,
+  .downloads-main {
     position: relative;
     background-image: url('/images/amcr-pas/bg-amcr-pas-downloads.webp');
     background-size: 1312px auto;
@@ -135,9 +138,33 @@
     background-color: #FFFFFF;
   }
   
+  .downloads-amcr-pas::before,
+  .downloads-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    z-index: 0;
+  }
+  
+  .downloads-amcr-pas > *,
+  .downloads-main > * {
+    position: relative;
+    z-index: 1;
+  }
+  
   @media (max-width: 768px) {
-    .downloads-amcr-pas {
+    .downloads-amcr-pas,
+    .downloads-main {
       background-image: none;
+    }
+    
+    .downloads-amcr-pas::before,
+    .downloads-main::before {
+      display: none;
     }
   }
 </style>

@@ -21,10 +21,10 @@
   <div class="max-w-content">
     <div class="text-center">
       <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #000000; margin-bottom: 16px;">
-        Rychlý výběr
+        {m['quickApps.label']()}
       </p>
       <h2 style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: var(--color-primary); margin-bottom: 80px;">
-        Vyberte si nástroj podle svých potřeb
+        {m['quickApps.title']()}
       </h2>
     </div>
 
@@ -65,61 +65,88 @@
           </p>
           
           {#if expandedApps[app.key]}
+            {@const expandedTextFn = (m as any)[`quickApps.${app.key}.expandedText`]}
+            {@const btn1TextFn = (m as any)[`quickApps.${app.key}.btn1Text`]}
+            {@const btn1LinkFn = (m as any)[`quickApps.${app.key}.btn1Link`]}
+            {@const expandedText2Fn = (m as any)[`quickApps.${app.key}.expandedText2`]}
+            {@const btn2TextFn = (m as any)[`quickApps.${app.key}.btn2Text`]}
+            {@const btn2LinkFn = (m as any)[`quickApps.${app.key}.btn2Link`]}
+            {@const expandedText3Fn = (m as any)[`quickApps.${app.key}.expandedText3`]}
+            {@const btn3TextFn = (m as any)[`quickApps.${app.key}.btn3Text`]}
+            {@const btn3LinkFn = (m as any)[`quickApps.${app.key}.btn3Link`]}
+            {@const btnTextFn = (m as any)[`quickApps.${app.key}.btnText`]}
+            {@const btnLinkFn = (m as any)[`quickApps.${app.key}.btnLink`]}
             <!-- Rozbalený obsah -->
             <div class="expanded-content" style="margin-top: 16px; width: 100%;">
-              <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
-                {(m as any)[`quickApps.${app.key}.expandedText`]()}
-              </p>
               
-              {#if (m as any)[`quickApps.${app.key}.btn1Text`]}
+              {#if expandedTextFn && typeof expandedTextFn === 'function'}
+                <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
+                  {expandedTextFn()}
+                </p>
+              {/if}
+              
+              {#if btn1TextFn && typeof btn1TextFn === 'function'}
                 <a
-                  href={(m as any)[`quickApps.${app.key}.btn1Link`]()}
+                  href={btn1LinkFn()}
                   target="_blank"
                   rel="noopener noreferrer"
                   onclick={(e) => e.stopPropagation()}
                   class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
                   style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
                 >
-                  {(m as any)[`quickApps.${app.key}.btn1Text`]()}
+                  {btn1TextFn()}
                 </a>
               {/if}
               
-              {#if (m as any)[`quickApps.${app.key}.expandedText2`]}
+              {#if expandedText2Fn && typeof expandedText2Fn === 'function'}
                 <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
-                  {(m as any)[`quickApps.${app.key}.expandedText2`]()}
+                  {expandedText2Fn()}
                 </p>
-                
-                {#if (m as any)[`quickApps.${app.key}.btn2Text`]}
-                  <a
-                    href={(m as any)[`quickApps.${app.key}.btn2Link`]()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onclick={(e) => e.stopPropagation()}
-                    class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
-                    style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
-                  >
-                    {(m as any)[`quickApps.${app.key}.btn2Text`]()}
-                  </a>
-                {/if}
               {/if}
               
-              {#if (m as any)[`quickApps.${app.key}.expandedText3`]}
+              {#if btn2TextFn && typeof btn2TextFn === 'function'}
+                <a
+                  href={btn2LinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btn2TextFn()}
+                </a>
+              {/if}
+              
+              {#if expandedText3Fn && typeof expandedText3Fn === 'function'}
                 <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px; line-height: 1.6;">
-                  {(m as any)[`quickApps.${app.key}.expandedText3`]()}
+                  {expandedText3Fn()}
                 </p>
-                
-                {#if (m as any)[`quickApps.${app.key}.btn3Text`]}
-                  <a
-                    href={(m as any)[`quickApps.${app.key}.btn3Link`]()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onclick={(e) => e.stopPropagation()}
-                    class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
-                    style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
-                  >
-                    {(m as any)[`quickApps.${app.key}.btn3Text`]()}
-                  </a>
-                {/if}
+              {/if}
+              
+              {#if btn3TextFn && typeof btn3TextFn === 'function'}
+                <a
+                  href={btn3LinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btn3TextFn()}
+                </a>
+              {/if}
+              
+              {#if btnTextFn && typeof btnTextFn === 'function'}
+                <a
+                  href={btnLinkFn()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onclick={(e) => e.stopPropagation()}
+                  class="inline-block bg-white text-black hover:bg-gray-100 transition-colors"
+                  style="padding: 8px 16px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; text-decoration: none; margin-bottom: 16px;"
+                >
+                  {btnTextFn()}
+                </a>
               {/if}
             </div>
             
