@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import { setLocale } from '$lib/paraglide/runtime';
 	import { base } from '$app/paths';
@@ -27,7 +26,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="{base}/amcr_mini.png" type="image/png" />
 </svelte:head>
 
 {@render children()}

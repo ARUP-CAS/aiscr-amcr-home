@@ -13,6 +13,14 @@ paths: {
 }
 ```
 
+V `src/routes/+layout.ts` bylo přidáno:
+
+```typescript
+export const trailingSlash = 'always';
+```
+
+Toto nastavení zajišťuje, že všechny stránky jsou generovány jako `index.html` ve složkách (např. `en/index.html` místo `en.html`), což je nutné pro správnou funkci relativních cest.
+
 ## Nasazení
 
 ### Varianta 1: Nasazení do root složky serveru
@@ -52,21 +60,40 @@ Pro **vnořené stránky** (`/en/amcr-pas.html`):
 
 ## Testování
 
-Web můžete otestovat lokálně:
+### Test 1: Lokální server z build složky
 
 ```bash
 cd build
 python3 -m http.server 8000
+# Otevřete http://localhost:8000/
 ```
 
-Nebo v podsložce:
+### Test 2: Simulace nasazení do podsložky
 
 ```bash
-mkdir -p /tmp/test/mysubdir
-cp -r build/* /tmp/test/mysubdir/
-cd /tmp/test
+mkdir -p /tmp/test-deploy/mysubdir
+cp -r build/* /tmp/test-deploy/mysubdir/
+cd /tmp/test-deploy
 python3 -m http.server 8000
 # Otevřete http://localhost:8000/mysubdir/
+```
+
+Vše by mělo fungovat správně v obou případech díky relativním cestám.
+
+## Ověření
+
+Kontrola, že jsou všechny cesty relativní:
+
+```bash
+# Nesmí vrátit žádné výsledky:
+find build -name '*.html' -exec grep -l 'src="/images' {} \;
+
+# Měly by být pouze relativní cesty:
+grep -oE 'src="[^"]*images[^"]*"' build/index.html | head -5
+# Výstup: src="./images/..."
+
+grep -oE 'src="[^"]*images[^"]*"' build/en/index.html | head -5
+# Výstup: src="../images/..."
 ```
 
 ## Změněné soubory
