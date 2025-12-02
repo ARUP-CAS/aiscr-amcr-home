@@ -1,0 +1,31 @@
+name: Attach Build to Release
+
+on:
+  release:
+    types: [created]  # Spustí se když vytvoříš release (i draft)
+
+jobs:
+  attach-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Download latest build artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build.yml
+          branch: main
+          name: build-artifact
+          path: .
+
+      - name: Rename artifact for release
+        run: |
+          mv aiscr-home-latest.zip aiscr-home-${{ github.event.release.tag_name }}.zip
+
+      - name: Upload ZIP to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: aiscr-home-${{ github.event.release.tag_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
