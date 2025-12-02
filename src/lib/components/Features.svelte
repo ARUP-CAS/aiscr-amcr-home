@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Database, Route } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 </script>
 
-<section class="features-section px-4 sm:px-6 lg:px-8" style="padding-top: 80px; padding-bottom: 64px;">
+<section class="features-section px-4 sm:px-6 lg:px-8" style="padding-top: 80px; padding-bottom: 64px; --features-bg: url('{base}/images/bg-hero.webp');">
   <div class="max-w-content">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       <!-- První sloupec -->
@@ -51,7 +52,7 @@
 <style>
   .features-section {
     position: relative;
-    background-image: url('/images/bg-hero.webp');
+    background-image: var(--features-bg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

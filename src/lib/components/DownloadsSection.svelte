@@ -1,6 +1,7 @@
 <script lang="ts">
   import { FileText, Download, ExternalLink, Globe } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 
   interface Props {
     prefix: string;
@@ -44,7 +45,7 @@
   const categories = getCategoriesForPrefix(prefix);
 </script>
 
-<section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'downloads-main'}" style="padding-top: 80px; padding-bottom: 80px;">
+<section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'downloads-main'}" style="padding-top: 80px; padding-bottom: 80px; --downloads-bg: url('{base}/images/amcr-pas/bg-amcr-pas-downloads.webp');">
   <div class="max-w-content">
     <h2 class="font-bold mb-12 text-center" style="font-family: 'Roboto Slab', serif; font-size: 48px; color: var(--color-primary);">
       {(m as any)[`${prefix}.downloads.title`]()}
@@ -131,7 +132,7 @@
   .downloads-amcr-pas,
   .downloads-main {
     position: relative;
-    background-image: url('/images/amcr-pas/bg-amcr-pas-downloads.webp');
+    background-image: var(--downloads-bg);
     background-size: 1312px auto;
     background-position: center top;
     background-repeat: no-repeat;

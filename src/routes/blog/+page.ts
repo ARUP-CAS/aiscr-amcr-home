@@ -23,11 +23,11 @@ export const load: PageLoad = async () => {
 					date: metadata.date || new Date().toISOString().split('T')[0],
 					category: metadata.category || '',
 					published: metadata.published !== false,
-					image: metadata.image || '/images/blog/placeholder.webp',
+					image: metadata.image,
 					readingTime: metadata.readingTime || '5 minut',
 					author: metadata.author || 'AIS CR Team',
 					authorRole: metadata.authorRole || '',
-					authorImage: metadata.authorImage || ''
+					authorImage: metadata.authorImage
 				};
 			})
 			.filter((post) => post !== null && post.published)

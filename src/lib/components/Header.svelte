@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Globe } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
   import { onMount } from 'svelte';
   
   // Reaktivní proměnná - sleduje, jestli jsme scrollovali
@@ -11,9 +12,9 @@
   let dropdownButton: HTMLButtonElement | null = $state(null);
   let dropdownPosition = $state({ top: 0, right: 0 });
   
-  // Helper pro locale-aware odkazy
-  function getBasePath(): string {
-    return currentLocale === 'en' ? '/en' : '';
+  // Helper pro locale-aware odkazy (kombinuje base path s locale)
+  function getLocalePath(): string {
+    return currentLocale === 'en' ? `${base}/en` : base;
   }
   
   // Language switcher - navigace na jinou URL
@@ -24,19 +25,23 @@
     const currentPath = window.location.pathname;
     const hash = window.location.hash;
     
+    // Odstranit base z cesty pro správné přepínání
+    const pathWithoutBase = currentPath.replace(new RegExp(`^${base}`), '');
+    
     if (currentLocale === 'cs') {
       // Switch to English: add /en prefix
-      window.location.href = '/en' + currentPath + hash;
+      window.location.href = `${base}/en${pathWithoutBase}${hash}`;
     } else {
       // Switch to Czech: remove /en prefix
-      const newPath = currentPath.replace(/^\/en/, '') || '/';
-      window.location.href = newPath + hash;
+      const newPath = pathWithoutBase.replace(/^\/en/, '') || '/';
+      window.location.href = `${base}${newPath}${hash}`;
     }
   }
   
   onMount(() => {
-    // Detekovat locale z URL
-    currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+    // Detekovat locale z URL (s respektováním base path)
+    const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+    currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
     
     // Zavřít dropdown při kliknutí mimo něj
     const handleClickOutside = (event: MouseEvent) => {
@@ -111,8 +116,8 @@
     <div class="flex items-center justify-between h-full w-full">
       <!-- Logo vlevo -->
       <div class="flex items-center flex-shrink-0">
-        <a href={currentLocale === 'en' ? '/en' : '/'} class="flex items-center">
-          <img src="/images/logos/header-logo.svg" alt="AIS ČR Logo" class="logo" />
+        <a href={currentLocale === 'en' ? `${base}/en` : `${base}/`} class="flex items-center">
+          <img src="{base}/images/logos/header-logo.svg" alt="AIS ČR Logo" class="logo" />
         </a>
       </div>
 
@@ -129,28 +134,28 @@
             {m['nav.help']()}
           </a>
           <a 
-            href="{getBasePath()}/#aktuality" 
+            href="{getLocalePath()}/#aktuality" 
             class="text-white hover:text-gray-200 transition-colors"
             style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           >
             {m['nav.news']()}
           </a>
           <a 
-            href="{getBasePath()}/amcr-pas" 
+            href="{getLocalePath()}/amcr-pas" 
             class="text-white hover:text-gray-200 transition-colors"
             style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           >
             {m['nav.amcrPas']()}
           </a>
           <a 
-            href="{getBasePath()}/downloads" 
+            href="{getLocalePath()}/downloads" 
             class="text-white hover:text-gray-200 transition-colors"
             style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           >
             {m['nav.downloads']()}
           </a>
           <a 
-            href="{getBasePath()}/#kontakty" 
+            href="{getLocalePath()}/#kontakty" 
             class="text-white hover:text-gray-200 transition-colors"
             style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           >
@@ -268,7 +273,7 @@
           {m['nav.help']()}
         </a>
         <a 
-          href="{getBasePath()}/#aktuality" 
+          href="{getLocalePath()}/#aktuality" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           onclick={() => isMobileMenuOpen = false}
@@ -276,7 +281,7 @@
           {m['nav.news']()}
         </a>
         <a 
-          href="{getBasePath()}/amcr-pas" 
+          href="{getLocalePath()}/amcr-pas" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           onclick={() => isMobileMenuOpen = false}
@@ -284,7 +289,7 @@
           {m['nav.amcrPas']()}
         </a>
         <a 
-          href="{getBasePath()}/downloads" 
+          href="{getLocalePath()}/downloads" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           onclick={() => isMobileMenuOpen = false}
@@ -292,7 +297,7 @@
           {m['nav.downloads']()}
         </a>
         <a 
-          href="{getBasePath()}/#kontakty" 
+          href="{getLocalePath()}/#kontakty" 
           class="block text-white hover:text-gray-200 transition-colors py-2"
           style="font-size: 16px; font-weight: 400; font-family: 'Roboto', sans-serif;"
           onclick={() => isMobileMenuOpen = false}

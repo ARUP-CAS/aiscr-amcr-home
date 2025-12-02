@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import { setLocale } from '$lib/paraglide/runtime';
+	import { base } from '$app/paths';
 	import { onMount, setContext } from 'svelte';
 
 	let { children } = $props();
@@ -18,7 +19,8 @@
 	// Initialize locale from URL on mount (for client-side hydration)
 	onMount(() => {
 		if (typeof window !== 'undefined') {
-			const locale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+			const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+			const locale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 			setLocale(locale as 'cs' | 'en');
 		}
 	});

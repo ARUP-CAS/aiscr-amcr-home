@@ -2,6 +2,7 @@
 	// Preview nejnovějších blog postů - SYNCHRONNÍ NAČTENÍ pro prerender
 	import { Shovel, ArrowLeft, ArrowRight } from '@lucide/svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	
 	// Synchronní načtení při SSR/prerender
@@ -25,8 +26,8 @@
 							   metadata?.category === 'Technologie' || metadata?.category === 'Technology' ? 'bg-blue-600' : 'bg-green-600',
 				author: metadata?.author || 'AIS CR Team',
 				authorRole: metadata?.authorRole || '',
-				authorImage: metadata?.authorImage || '',
-				image: metadata?.image || '/images/blog/placeholder.webp',
+				authorImage: metadata?.authorImage,
+				image: metadata?.image,
 				readTime: metadata?.readingTime || '5 minut'
 			};
 		})
@@ -35,15 +36,25 @@
 		.slice(0, 3);
 	
 	let blogPosts = $state<any[]>(posts);
+
+	// Helper pro transformaci absolutních cest na relativní
+	function resolveImagePath(path: string | undefined): string {
+		if (!path) return '';
+		if (path.startsWith('/')) {
+			return `${base}${path}`;
+		}
+		return path;
+	}
 	let currentLocale = $state('cs');
 
 	// Detekce locale pro správné odkazy
 	onMount(() => {
-		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+		const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+		currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 	});
 
 	function getBlogUrl(slug: string): string {
-		return currentLocale === 'en' ? `/en/blog/${slug}` : `/blog/${slug}`;
+		return currentLocale === 'en' ? `${base}/en/blog/${slug}` : `${base}/blog/${slug}`;
 	}
 
 	function formatDate(dateString: string) {
@@ -109,7 +120,7 @@
 	}
 </script>
 
-<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px; display: none;">
+<section id="blog" class="blog-section" style="font-family: 'Roboto', sans-serif; background-color: #FFFFFF; padding-top: 112px; padding-bottom: 80px; display: none; --blog-bg: url('{base}/images/amcr-pas/bg-amcr-pas-blog.webp');">
 	<div class="w-full px-4 sm:px-6 lg:px-8" style="max-width: 1312px; margin: 0 auto;">
 		
 		<!-- Header with icon -->
@@ -136,7 +147,7 @@
 				{#each blogPosts as post}
 					<article class="flex-none bg-white shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex flex-col" style="scroll-snap-align: start; width: 390px; height: 629px; padding: 24px;">
 						<div class="overflow-hidden" style="height: 300px; width: 100%;">
-							<img src={post.image} alt={post.title} class="w-full h-full object-cover" />
+							<img src={resolveImagePath(post.image)} alt={post.title} class="w-full h-full object-cover" />
 						</div>
 						
 						<div class="flex flex-col flex-1" style="margin-top: 24px;">
@@ -158,7 +169,7 @@
 							
 							<div class="flex items-start space-x-3 mt-auto" style="font-family: 'Roboto', sans-serif;">
 								{#if post.authorImage}
-									<img src={post.authorImage} alt={post.author} class="rounded-full flex-shrink-0 object-cover" style="width: 48px; height: 48px;" />
+									<img src={resolveImagePath(post.authorImage)} alt={post.author} class="rounded-full flex-shrink-0 object-cover" style="width: 48px; height: 48px;" />
 								{:else}
 									<div class="bg-gray-400 rounded-full flex-shrink-0" style="width: 48px; height: 48px;"></div>
 								{/if}
@@ -202,7 +213,7 @@
 
 <style>
 	.blog-section {
-		background-image: url('/images/amcr-pas/bg-amcr-pas-blog.webp');
+		background-image: var(--blog-bg);
 		background-size: 1312px auto;
 		background-position: center top;
 		background-repeat: no-repeat;

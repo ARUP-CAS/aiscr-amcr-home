@@ -1,13 +1,20 @@
 <script lang="ts">
   import { MapPin, GraduationCap, FlaskConical, Landmark } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 
-  const items = [
-    { key: 'item1', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-1.webp' },
-    { key: 'item2', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-2.webp' },
-    { key: 'item3', imagePosition: 'right', image: '/images/amcr-pas/bg-amcr-pas-info-3.webp' },
-    { key: 'item4', imagePosition: 'left', image: '/images/amcr-pas/bg-amcr-pas-info-4.webp' }
+  const itemsData = [
+    { key: 'item1', imagePosition: 'right', imagePath: 'bg-amcr-pas-info-1.webp' },
+    { key: 'item2', imagePosition: 'left', imagePath: 'bg-amcr-pas-info-2.webp' },
+    { key: 'item3', imagePosition: 'right', imagePath: 'bg-amcr-pas-info-3.webp' },
+    { key: 'item4', imagePosition: 'left', imagePath: 'bg-amcr-pas-info-4.webp' }
   ];
+
+  // Přidat base k cestám obrázků
+  const items = $derived(itemsData.map(i => ({
+    ...i,
+    image: `${base}/images/amcr-pas/${i.imagePath}`
+  })));
 </script>
 
 <section id="zakladni-informace" class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">

@@ -46,8 +46,8 @@ export const load: PageLoad = async ({ params }) => {
 				readingTime: metadata.readingTime || '5 minut',
 				author: metadata.author || 'AIS CR',
 				authorRole: metadata.authorRole || 'Archeologický informační systém',
-				authorImage: metadata.authorImage || '/images/people/ais-staff.png',
-				image: metadata.image || '/images/blog/placeholder.webp',
+				authorImage: metadata.authorImage,
+				image: metadata.image,
 				content // ← Render funkce!
 			}
 		};

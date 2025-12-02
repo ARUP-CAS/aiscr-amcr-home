@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 </script>
 
 <section id="o-amcr-pas" class="px-4 sm:px-6 lg:px-8" style="padding-top: 64px; padding-bottom: 64px;">
@@ -9,7 +10,7 @@
       <div class="order-2 lg:order-1">
         <div class="h-full">
           <img
-            src="/images/amcr-pas/bg-amcr-pas-about.webp"
+            src="{base}/images/amcr-pas/bg-amcr-pas-about.webp"
             alt={m['amcrPas.about.title']()}
             class="w-full h-full object-cover"
           />

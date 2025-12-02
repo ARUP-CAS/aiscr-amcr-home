@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
   import { onMount } from 'svelte';
   
   interface NewsItem {
@@ -25,7 +26,8 @@
   const STORAGE_KEY = 'amcr_dismissed_news';
   
   onMount(() => {
-    currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+    const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+    currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
     
     // Zkontroluj localStorage, jestli byla tato aktualita již zavřena
     if (latestNews) {
@@ -89,8 +91,8 @@
     };
   });
   
-  function getBasePath(): string {
-    return currentLocale === 'en' ? '/en' : '';
+  function getLocalePath(): string {
+    return currentLocale === 'en' ? `${base}/en` : base;
   }
 </script>
 
@@ -103,7 +105,7 @@
             {currentLocale === 'cs' ? 'Nové' : 'New'}
           </span>
           <a 
-            href="{getBasePath()}/aktuality/{latestNews.slug}"
+            href="{getLocalePath()}/aktuality/{latestNews.slug}"
             class="text-sm text-gray-800 hover:text-primary transition-colors truncate"
             style="font-family: 'Roboto', sans-serif; font-weight: 500;"
           >

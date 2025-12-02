@@ -3,17 +3,28 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let currentLocale = $state('cs');
 
 	onMount(() => {
-		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+		const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+		currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 	});
 
-	function getBasePath(): string {
-		return currentLocale === 'en' ? '/en' : '';
+	function getLocalePath(): string {
+		return currentLocale === 'en' ? `${base}/en` : base;
+	}
+
+	// Helper pro transformaci absolutních cest na relativní
+	function resolveImagePath(path: string | undefined): string {
+		if (!path) return '';
+		if (path.startsWith('/')) {
+			return `${base}${path}`;
+		}
+		return path;
 	}
 
 	function formatDate(dateString: string) {
@@ -42,7 +53,7 @@
 			<div class="max-w-content px-4 sm:px-6 lg:px-8">
 				<!-- Zpět na aktuality -->
 				<a
-					href="{getBasePath()}/#aktuality"
+					href="{getLocalePath()}/#aktuality"
 					class="inline-flex items-center text-primary hover:underline mb-6"
 					style="font-family: 'Roboto', sans-serif; font-size: 16px;"
 				>
@@ -100,7 +111,7 @@
 			<div class="max-w-content px-4 sm:px-6 lg:px-8">
 				{#if data.news.image}
 					<img
-						src={data.news.image}
+						src={resolveImagePath(data.news.image)}
 						alt={data.news.title}
 						class="w-full h-auto rounded-lg mb-8"
 						style="max-height: 500px; object-fit: cover;"

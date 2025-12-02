@@ -2,6 +2,7 @@
 	// Footer komponenta
 	import { MapPin, User, Globe, Mail, Facebook, Linkedin, Youtube, Github, CircleUser, Compass, MailOpen } from '@lucide/svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { base } from '$app/paths';
 	import { onMount, getContext } from 'svelte';
 
 	// Získat callback z contextu
@@ -10,11 +11,12 @@
 	let currentLocale = $state('cs');
 
 	onMount(() => {
-		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+		const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+		currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 	});
 
-	function getBasePath(): string {
-		return currentLocale === 'en' ? '/en' : '';
+	function getLocalePath(): string {
+		return currentLocale === 'en' ? `${base}/en` : base;
 	}
 	
 	function handleCookieSettings() {
@@ -24,7 +26,7 @@
 	}
 </script>
 
-<footer id="kontakty" class="footer-section py-16 border-t border-black" style="font-family: 'Roboto', sans-serif; background-color: #e5e7eb;">
+<footer id="kontakty" class="footer-section py-16 border-t border-black" style="font-family: 'Roboto', sans-serif; background-color: #e5e7eb; --footer-bg: url('{base}/images/bg-footer.webp');">
 	<div class="w-full px-4 sm:px-6 lg:px-8" style="max-width: 1312px; margin: 0 auto;">
 		
 		<!-- Main content -->
@@ -39,17 +41,17 @@
 					
 					<div class="space-y-3">
 						<div>
-							<a href="{getBasePath()}/#aplikace" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getLocalePath()}/#aplikace" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.services']()}
 							</a>
 						</div>
 						<div>
-							<a href="{getBasePath()}/blog" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getLocalePath()}/blog" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.blog']()}
 							</a>
 						</div>
 						<div>
-							<a href="{getBasePath()}/#faq" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="{getLocalePath()}/#faq" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.faq']()}
 							</a>
 						</div>
@@ -150,11 +152,11 @@
 		<!-- Partner logos -->
 		<div class="mb-12">
 			<div class="flex flex-wrap gap-8 items-center">
-				<img src="/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
-				<img src="/images/logos/logo-arub.png" alt="ARUB" style="max-height: 48px; width: auto;" />
-				<img src="/images/logos/logo-aru.png" alt="Archeologický ústav AV ČR Praha" style="max-height: 48px; width: auto;" />
-				<img src="/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
-				<img src="/images/logos/infra-black.png" alt="Velké výzkumné infrastruktury" style="max-height: 48px; width: auto;" />
+				<img src="{base}/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
+				<img src="{base}/images/logos/logo-arub.png" alt="ARUB" style="max-height: 48px; width: auto;" />
+				<img src="{base}/images/logos/logo-aru.png" alt="Archeologický ústav AV ČR Praha" style="max-height: 48px; width: auto;" />
+				<img src="{base}/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
+				<img src="{base}/images/logos/infra-black.png" alt="Velké výzkumné infrastruktury" style="max-height: 48px; width: auto;" />
 			</div>
 		</div>
 
@@ -208,7 +210,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-image: url('/images/bg-footer.webp');
+		background-image: var(--footer-bg);
 		background-size: 1312px;
 		background-position: center top;
 		background-repeat: no-repeat;

@@ -3,17 +3,28 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let currentLocale = $state('cs');
 
 	onMount(() => {
-		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+		const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+		currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 	});
 
 	function getBlogUrl(slug: string): string {
-		return currentLocale === 'en' ? `/en/blog/${slug}` : `/blog/${slug}`;
+		return currentLocale === 'en' ? `${base}/en/blog/${slug}` : `${base}/blog/${slug}`;
+	}
+
+	// Helper pro transformaci absolutních cest na relativní
+	function resolveImagePath(path: string | undefined): string {
+		if (!path) return '';
+		if (path.startsWith('/')) {
+			return `${base}${path}`;
+		}
+		return path;
 	}
 
 	function formatDate(dateString: string) {
@@ -44,7 +55,7 @@
 					<article class="bg-white shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex flex-col" style="padding: 24px;">
 						{#if post.image}
 							<div class="overflow-hidden" style="height: 200px; width: 100%; margin-bottom: 16px;">
-								<img src={post.image} alt={post.title} class="w-full h-full object-cover" />
+								<img src={resolveImagePath(post.image)} alt={post.title} class="w-full h-full object-cover" />
 							</div>
 						{/if}
 

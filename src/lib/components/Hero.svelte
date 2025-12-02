@@ -1,6 +1,7 @@
 <script lang="ts">
   import { ChevronRight } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
   
   let { isBannerClosed = false, isScrolled = false } = $props<{
     isBannerClosed?: boolean;
@@ -15,7 +16,7 @@
   });
 </script>
 
-<section class="hero-section px-4 sm:px-6 lg:px-8" style="height: 780px; margin-top: {marginTop()}px; display: flex; align-items: center;">
+<section class="hero-section px-4 sm:px-6 lg:px-8" style="height: 780px; margin-top: {marginTop()}px; display: flex; align-items: center; --hero-bg: url('{base}/images/bg-hero.webp'); --hero-bg-right: url('{base}/images/bg-hero-right.webp');">
   <div class="max-w-content w-full">
     <div class="hero-content text-left">
       <h1 class="hero-title" style="font-family: 'Roboto Slab', serif; font-size: 56px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2; text-align: left;">
@@ -53,7 +54,7 @@
 <style>
   .hero-section {
     position: relative;
-    background-image: url('/images/bg-hero.webp');
+    background-image: var(--hero-bg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -66,7 +67,7 @@
     right: 0;
     bottom: 0;
     width: 50%;
-    background-image: url('/images/bg-hero-right.webp');
+    background-image: var(--hero-bg-right);
     background-size: contain;
     background-position: right center;
     background-repeat: no-repeat;

@@ -3,17 +3,28 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { m } from '$lib/paraglide/messages.js';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let currentLocale = $state('cs');
 
 	onMount(() => {
-		currentLocale = window.location.pathname.startsWith('/en') ? 'en' : 'cs';
+		const pathWithoutBase = window.location.pathname.replace(new RegExp(`^${base}`), '');
+		currentLocale = pathWithoutBase.startsWith('/en') ? 'en' : 'cs';
 	});
 
-	function getBasePath(): string {
-		return currentLocale === 'en' ? '/en' : '';
+	function getLocalePath(): string {
+		return currentLocale === 'en' ? `${base}/en` : base;
+	}
+
+	// Helper pro transformaci absolutních cest na relativní
+	function resolveImagePath(path: string | undefined): string {
+		if (!path) return '';
+		if (path.startsWith('/')) {
+			return `${base}${path}`;
+		}
+		return path;
 	}
 
 	function formatDate(dateString: string) {
@@ -42,7 +53,7 @@
 			<div class="max-w-content px-4 sm:px-6 lg:px-8">
 				<!-- Zpět na blog -->
 				<a
-					href="{getBasePath()}/blog"
+					href="{getLocalePath()}/blog"
 					class="inline-flex items-center text-primary hover:underline mb-6"
 					style="font-family: 'Roboto', sans-serif; font-size: 16px;"
 				>
@@ -101,7 +112,7 @@
 							<div class="flex items-start gap-4">
 								{#if data.post.authorImage}
 									<img
-										src={data.post.authorImage}
+										src={resolveImagePath(data.post.authorImage)}
 										alt={data.post.author}
 										class="w-16 h-16 rounded-full object-cover"
 									/>
@@ -122,7 +133,7 @@
 					<div class="lg:col-span-2">
 						{#if data.post.image}
 							<img
-								src={data.post.image}
+								src={resolveImagePath(data.post.image)}
 								alt={data.post.title}
 								class="w-full h-auto rounded-lg mb-8"
 							/>

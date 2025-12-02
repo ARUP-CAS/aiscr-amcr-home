@@ -18,6 +18,12 @@ const config = {
 			precompress: false,
 			strict: true
 		}),
+		paths: {
+			// Pro nasazení do podsložky nastavte base cestu, např.:
+			// base: '/amcr' nebo base: process.env.BASE_PATH || ''
+			base: process.env.BASE_PATH || '',
+			relative: true
+		},
 		prerender: {
 			entries: [
 				'/',

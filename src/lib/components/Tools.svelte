@@ -1,15 +1,22 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 
-  const tools = [
-    { key: 'tool1', imagePosition: 'right', image: '/images/tools-1.webp' },
-    { key: 'tool2', imagePosition: 'left', image: '/images/tools-2.webp' },
-    { key: 'tool3', imagePosition: 'right', image: '/images/tools-3.webp' },
-    { key: 'tool4', imagePosition: 'left', image: '/images/tools-4.webp' },
-    { key: 'tool5', imagePosition: 'right', image: '/images/tools-5.webp' },
-    { key: 'tool6', imagePosition: 'left', image: '/images/tools-6.webp' },
-    { key: 'tool7', imagePosition: 'right', image: '/images/tools-7.webp' }
+  const toolsData = [
+    { key: 'tool1', imagePosition: 'right', imagePath: 'tools-1.webp' },
+    { key: 'tool2', imagePosition: 'left', imagePath: 'tools-2.webp' },
+    { key: 'tool3', imagePosition: 'right', imagePath: 'tools-3.webp' },
+    { key: 'tool4', imagePosition: 'left', imagePath: 'tools-4.webp' },
+    { key: 'tool5', imagePosition: 'right', imagePath: 'tools-5.webp' },
+    { key: 'tool6', imagePosition: 'left', imagePath: 'tools-6.webp' },
+    { key: 'tool7', imagePosition: 'right', imagePath: 'tools-7.webp' }
   ];
+
+  // Přidat base k cestám obrázků
+  const tools = $derived(toolsData.map(t => ({
+    ...t,
+    image: `${base}/images/${t.imagePath}`
+  })));
 </script>
 
 <section id="nastroje" class="px-4 sm:px-6 lg:px-8 bg-white" style="padding-top: 40px; padding-bottom: 80px;">

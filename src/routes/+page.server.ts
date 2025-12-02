@@ -18,7 +18,7 @@ export const load: PageServerLoad = async () => {
 					time: metadata.time || '00:00',
 					badge: metadata.badge || '',
 					published: metadata.published !== false,
-					image: metadata.image || '/images/blog/placeholder.webp'
+					image: metadata.image
 				};
 			})
 			.filter((item) => item.published)

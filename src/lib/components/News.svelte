@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Newspaper, ChevronRight, ChevronDown, ChevronUp } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 
   interface NewsItem {
     slug: string;
@@ -61,7 +62,7 @@
   }
 </script>
 
-<section id="aktuality" class="news-section px-4 sm:px-6 lg:px-8" style="background-color: #EEEEEE; padding-top: 104px; padding-bottom: 80px;">
+<section id="aktuality" class="news-section px-4 sm:px-6 lg:px-8" style="background-color: #EEEEEE; padding-top: 104px; padding-bottom: 80px; --news-bg: url('{base}/images/bg-news.webp');">
   <div class="max-w-content">
     <!-- Header s ikonou -->
     <div class="flex items-center" style="margin-bottom: 24px;">
@@ -107,7 +108,7 @@
               {item.badge}
             </span>
             <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px;">
-              <a href="/aktuality/{item.slug}" class="hover:text-primary transition-colors" style="color: #000000; text-decoration: none;">
+              <a href="{base}/aktuality/{item.slug}" class="hover:text-primary transition-colors" style="color: #000000; text-decoration: none;">
                 {item.title}
               </a>
             </h3>
@@ -162,7 +163,7 @@
 <style>
   .news-section {
     position: relative;
-    background-image: url('/images/bg-news.webp');
+    background-image: var(--news-bg);
     background-size: 1312px auto;
     background-position: center top;
     background-repeat: no-repeat;

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 </script>
 
-<section class="additional-services-section px-4 sm:px-6 lg:px-8" style="height: 518px; display: flex; align-items: center; justify-content: center;">
+<section class="additional-services-section px-4 sm:px-6 lg:px-8" style="height: 518px; display: flex; align-items: center; justify-content: center; --services-bg: url('{base}/images/bg-additional-services.webp');">
   <div class="text-center">
     <div class="content-panel" style="width: 950px; height: 294px; background: linear-gradient(0deg, #DB9134 0%, #448E99 100%); backdrop-filter: blur(1px); border-radius: 10px; padding: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
       <h2 style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: #FFFFFF; margin-bottom: 24px; text-align: center;">
@@ -25,7 +26,7 @@
 <style>
   .additional-services-section {
     position: relative;
-    background-image: url('/images/bg-additional-services.webp');
+    background-image: var(--services-bg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

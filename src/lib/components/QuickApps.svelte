@@ -1,13 +1,20 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
   import { ChevronDown, ChevronUp } from '@lucide/svelte';
 
-  const apps = [
-    { key: 'app1', icon: 'search', bgImage: '/images/bg-quick-select-1.webp' },
-    { key: 'app2', icon: 'map', bgImage: '/images/bg-quick-select-2.webp' },
-    { key: 'app3', icon: 'database', bgImage: '/images/bg-quick-select-3.webp' },
-    { key: 'app4', icon: 'file', bgImage: '/images/bg-quick-select-4.webp' }
+  const appsData = [
+    { key: 'app1', icon: 'search', bgImagePath: 'bg-quick-select-1.webp' },
+    { key: 'app2', icon: 'map', bgImagePath: 'bg-quick-select-2.webp' },
+    { key: 'app3', icon: 'database', bgImagePath: 'bg-quick-select-3.webp' },
+    { key: 'app4', icon: 'file', bgImagePath: 'bg-quick-select-4.webp' }
   ];
+  
+  // Přidat base k cestám obrázků
+  const apps = $derived(appsData.map(a => ({
+    ...a,
+    bgImage: `${base}/images/${a.bgImagePath}`
+  })));
   
   // Sledování rozbalených aplikací
   let expandedApps = $state<Record<string, boolean>>({});

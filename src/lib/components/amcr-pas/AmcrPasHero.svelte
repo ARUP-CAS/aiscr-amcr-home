@@ -1,9 +1,10 @@
 <script lang="ts">
   import { ChevronRight, Info, HelpCircle, Download, ChevronDown } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { base } from '$app/paths';
 </script>
 
-<section class="amcr-pas-hero-section px-4 sm:px-6 lg:px-8" style="height: 719px; margin-top: 120px; padding-top: 60px;">
+<section class="amcr-pas-hero-section px-4 sm:px-6 lg:px-8" style="height: 719px; margin-top: 120px; padding-top: 60px; --pas-hero-bg: url('{base}/images/amcr-pas/bg-amcr-pas-hero.webp');">
   <div class="max-w-content w-full">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Levý sloupec -->
@@ -80,7 +81,7 @@
 <style>
   .amcr-pas-hero-section {
     position: relative;
-    background-image: url('/images/amcr-pas/bg-amcr-pas-hero.webp');
+    background-image: var(--pas-hero-bg);
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
