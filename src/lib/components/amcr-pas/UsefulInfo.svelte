@@ -37,10 +37,12 @@
             <!-- Text vpravo -->
             <div class="order-2 lg:order-2">
               {#if item.key === 'item2'}
-                <GraduationCap size={48} color="var(--color-primary)" style="margin-bottom: 24px;" />
-                <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;">
-                  {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
-                </h3>
+                <div class="flex items-center gap-4 mb-6">
+                  <GraduationCap size={48} color="var(--color-primary)" class="flex-shrink-0" />
+                  <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); line-height: 1.2;">
+                    {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
+                  </h3>
+                </div>
                 <p style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 24px; line-height: 1.6;">
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.intro`]()}
                 </p>
@@ -65,10 +67,12 @@
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.section2Footer`]()}
                 </p>
               {:else if item.key === 'item4'}
-                <Landmark size={48} color="var(--color-primary)" style="margin-bottom: 24px;" />
-                <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;">
-                  {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
-                </h3>
+                <div class="flex items-center gap-4 mb-6">
+                  <Landmark size={48} color="var(--color-primary)" class="flex-shrink-0" />
+                  <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); line-height: 1.2;">
+                    {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
+                  </h3>
+                </div>
                 <p style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 24px; line-height: 1.6;">
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.intro`]()}
                 </p>
@@ -86,10 +90,12 @@
             <!-- Text vlevo -->
             <div class="order-2 lg:order-1">
               {#if item.key === 'item1'}
-                <MapPin size={48} color="var(--color-primary)" style="margin-bottom: 24px;" />
-                <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;">
-                  {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
-                </h3>
+                <div class="flex items-center gap-4 mb-6">
+                  <MapPin size={48} color="var(--color-primary)" class="flex-shrink-0" />
+                  <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); line-height: 1.2;">
+                    {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
+                  </h3>
+                </div>
                 <p style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 24px; line-height: 1.6;">
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.intro`]()}
                 </p>
@@ -114,10 +120,12 @@
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.section2Footer`]()}
                 </p>
               {:else if item.key === 'item2'}
-                <GraduationCap size={48} color="var(--color-primary)" style="margin-bottom: 24px;" />
-                <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;">
-                  {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
-                </h3>
+                <div class="flex items-center gap-4 mb-6">
+                  <GraduationCap size={48} color="var(--color-primary)" class="flex-shrink-0" />
+                  <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); line-height: 1.2;">
+                    {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
+                  </h3>
+                </div>
                 <p style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 24px; line-height: 1.6;">
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.intro`]()}
                 </p>
@@ -142,10 +150,12 @@
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.section2Footer`]()}
                 </p>
               {:else if item.key === 'item3'}
-                <FlaskConical size={48} color="var(--color-primary)" style="margin-bottom: 24px;" />
-                <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;">
-                  {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
-                </h3>
+                <div class="flex items-center gap-4 mb-6">
+                  <FlaskConical size={48} color="var(--color-primary)" class="flex-shrink-0" />
+                  <h3 style="font-family: 'Roboto Slab', serif; font-size: 40px; font-weight: 700; color: var(--color-primary); line-height: 1.2;">
+                    {(m as any)[`amcrPas.usefulInfo.${item.key}.title`]()}
+                  </h3>
+                </div>
                 <p style="font-family: 'Roboto', sans-serif; font-size: 20px; font-weight: 700; color: #000000; margin-bottom: 24px; line-height: 1.6;">
                   {@html (m as any)[`amcrPas.usefulInfo.${item.key}.intro`]()}
                 </p>

@@ -3,10 +3,10 @@
   import { base } from '$app/paths';
 </script>
 
-<section class="additional-services-section px-4 sm:px-6 lg:px-8" style="height: 518px; display: flex; align-items: center; justify-content: center; --services-bg: url('{base}/images/bg-additional-services.webp');">
-  <div class="text-center">
-    <div class="content-panel" style="width: 950px; height: 294px; background: linear-gradient(0deg, #DB9134 0%, #448E99 100%); backdrop-filter: blur(1px); border-radius: 10px; padding: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <h2 style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: #FFFFFF; margin-bottom: 24px; text-align: center;">
+<section class="additional-services-section px-4 sm:px-6 lg:px-8 py-16 md:py-24" style="min-height: 400px; display: flex; align-items: center; justify-content: center; --services-bg: url('{base}/images/bg-additional-services.webp');">
+  <div class="text-center w-full">
+    <div class="content-panel w-full max-w-[950px] mx-auto rounded-[10px] p-6 sm:p-8 md:p-12 flex flex-col items-center justify-center">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl" style="font-family: 'Roboto Slab', serif; font-weight: 700; color: #FFFFFF; margin-bottom: 24px; text-align: center;">
         {m['additionalServices.title']()}
       </h2>
       <p style="font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 32px; text-align: center;">
@@ -28,7 +28,7 @@
     position: relative;
     background-image: var(--services-bg);
     background-size: cover;
-    background-position: center;
+    background-position: 80% center;
     background-repeat: no-repeat;
   }
   

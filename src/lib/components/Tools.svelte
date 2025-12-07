@@ -3,7 +3,7 @@
   import { base } from '$app/paths';
 
   const toolsData = [
-    { key: 'tool1', imagePosition: 'right', imagePath: 'tools-1.webp' },
+    { key: 'tool1', imagePosition: 'right', imagePath: 'tools-1.webp', imageAlign: 'bottom' },
     { key: 'tool2', imagePosition: 'left', imagePath: 'tools-2.webp' },
     { key: 'tool3', imagePosition: 'right', imagePath: 'tools-3.webp' },
     { key: 'tool4', imagePosition: 'left', imagePath: 'tools-4.webp' },
@@ -35,8 +35,8 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
           {#if tool.imagePosition === 'left'}
             <!-- Obrázek vlevo -->
-            <div class="order-1 lg:order-1">
-              <div class="aspect-video overflow-hidden">
+            <div class="order-1 lg:order-1 h-full {tool.imageAlign === 'bottom' ? 'flex items-end' : ''}">
+              <div class="aspect-video overflow-hidden w-full">
                 <img
                   src={tool.image}
                   alt={(m as any)[`tools.${tool.key}.title`]()}
@@ -45,7 +45,7 @@
               </div>
             </div>
             <!-- Text vpravo -->
-            <div class="order-2 lg:order-2" style="padding: 64px;">
+            <div class="order-2 lg:order-2 py-16 px-8 lg:px-16">
               <h3 style="font-family: 'Roboto', sans-serif; font-size: 32px; font-weight: 700; color: #000000; margin-bottom: 24px;">
                 {(m as any)[`tools.${tool.key}.title`]()}
               </h3>
@@ -64,7 +64,7 @@
             </div>
           {:else}
             <!-- Text vlevo -->
-            <div class="order-2 lg:order-1" style="padding: 64px;">
+            <div class="order-2 lg:order-1 py-16 px-8 lg:px-16">
               <h3 style="font-family: 'Roboto', sans-serif; font-size: 32px; font-weight: 700; color: #000000; margin-bottom: 24px;">
                 {(m as any)[`tools.${tool.key}.title`]()}
               </h3>
@@ -82,8 +82,8 @@
               </a>
             </div>
             <!-- Obrázek vpravo -->
-            <div class="order-1 lg:order-2">
-              <div class="aspect-video overflow-hidden">
+            <div class="order-1 lg:order-2 h-full {tool.imageAlign === 'bottom' ? 'flex items-end' : ''}">
+              <div class="aspect-video overflow-hidden w-full">
                 <img
                   src={tool.image}
                   alt={(m as any)[`tools.${tool.key}.title`]()}

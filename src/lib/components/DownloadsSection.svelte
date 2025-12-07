@@ -47,9 +47,16 @@
 
 <section id={sectionId} class="px-4 sm:px-6 lg:px-8 {prefix === 'amcrPas' ? 'downloads-amcr-pas' : 'downloads-main'}" style="padding-top: 80px; padding-bottom: 80px; --downloads-bg: url('{base}/images/amcr-pas/bg-amcr-pas-downloads.webp');">
   <div class="max-w-content">
-    <h2 class="font-bold mb-12 text-center" style="font-family: 'Roboto Slab', serif; font-size: 48px; color: var(--color-primary);">
+    <h2 class="font-bold mb-6 text-center" style="font-family: 'Roboto Slab', serif; font-size: 48px; color: var(--color-primary);">
       {(m as any)[`${prefix}.downloads.title`]()}
     </h2>
+    {#if (m as any)[`${prefix}.downloads.description`]}
+      <p class="text-center mb-12 max-w-3xl mx-auto" style="font-family: 'Roboto', sans-serif; font-size: 16px; color: #666;">
+        {(m as any)[`${prefix}.downloads.description`]()}
+      </p>
+    {:else}
+      <div class="mb-12"></div>
+    {/if}
 
     <div class="space-y-12">
       {#each categories as category, index}
@@ -65,14 +72,22 @@
               {@const descKey = `${prefix}.downloads.${category.key}.${doc.key}.description`}
               {@const fileKey = `${prefix}.downloads.${category.key}.${doc.key}.file`}
               {@const typeKey = `${prefix}.downloads.${category.key}.${doc.key}.type`}
+              {@const buttonTypeKey = `${prefix}.downloads.${category.key}.${doc.key}.buttonType`}
+              {@const buttonLabelKey = `${prefix}.downloads.${category.key}.${doc.key}.buttonLabel`}
               {@const titleFn = (m as any)[titleKey]}
               {@const descFn = (m as any)[descKey]}
               {@const fileFn = (m as any)[fileKey]}
               {@const typeFn = (m as any)[typeKey]}
+              {@const buttonTypeFn = (m as any)[buttonTypeKey]}
+              {@const buttonLabelFn = (m as any)[buttonLabelKey]}
               {@const isLink = typeFn && typeFn() === 'link'}
-              {@const visitLabelFn = (m as any)[`${prefix}.downloads.visitLabel`]}
+              {@const buttonType = buttonTypeFn ? buttonTypeFn() : (isLink ? 'visit' : 'download')}
               {@const downloadLabelFn = (m as any)[`${prefix}.downloads.downloadLabel`]}
+              {@const readLabelFn = (m as any)[`${prefix}.downloads.readLabel`]}
+              {@const visitLabelFn = (m as any)[`${prefix}.downloads.visitLabel`]}
+              {@const watchLabelFn = (m as any)[`${prefix}.downloads.watchLabel`]}
               {#if titleFn && descFn && fileFn}
+                {@const buttonLabel = buttonLabelFn ? buttonLabelFn() : (buttonType === 'download' ? (downloadLabelFn ? downloadLabelFn() : 'Download') : (buttonType === 'read' ? (readLabelFn ? readLabelFn() : 'Read') : (buttonType === 'watch' ? (watchLabelFn ? watchLabelFn() : 'Watch') : (visitLabelFn ? visitLabelFn() : 'Visit'))))}
                 <div class="flex items-center justify-between bg-white hover:bg-gray-50 transition-colors" style="padding: 16px; border: 1px solid #000000;">
                   <div class="flex items-start space-x-4 flex-1">
                     <!-- Ikona dokumentu nebo globe -->
@@ -104,7 +119,7 @@
                       class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
                       style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
                     >
-                      <span>{visitLabelFn && typeof visitLabelFn === 'function' ? visitLabelFn() : 'Visit'}</span>
+                      <span>{buttonLabel}</span>
                       <ExternalLink size={16} color="#000000" />
                     </a>
                   {:else}
@@ -114,7 +129,7 @@
                       class="flex-shrink-0 ml-4 inline-flex items-center hover:underline transition-colors"
                       style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; text-decoration: none; gap: 8px;"
                     >
-                      <span>{downloadLabelFn()}</span>
+                      <span>{buttonLabel}</span>
                       <Download size={16} color="#000000" />
                     </a>
                   {/if}

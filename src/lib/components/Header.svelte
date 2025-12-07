@@ -233,7 +233,7 @@
       style="font-size: 14px; font-family: 'Roboto', sans-serif;"
       onclick={() => isDropdownOpen = false}
     >
-      AMČR
+      {m['nav.app.amcr']()}
     </a>
     <a
       href="https://digiarchiv.aiscr.cz/"
@@ -243,7 +243,7 @@
       style="font-size: 14px; font-family: 'Roboto', sans-serif;"
       onclick={() => isDropdownOpen = false}
     >
-      Digitální archiv AMČR
+      {m['nav.app.digitalArchive']()}
     </a>
     <a
       href="https://api.aiscr.cz/"
@@ -253,7 +253,7 @@
       style="font-size: 14px; font-family: 'Roboto', sans-serif;"
       onclick={() => isDropdownOpen = false}
     >
-      AMČR API
+      {m['nav.app.api']()}
     </a>
   </div>
 {/if}
@@ -330,7 +330,7 @@
               style="font-size: 14px; font-family: 'Roboto', sans-serif;"
               onclick={() => isMobileMenuOpen = false}
             >
-              AMČR
+              {m['nav.app.amcr']()}
             </a>
             <a
               href="https://digiarchiv.aiscr.cz/"
@@ -340,7 +340,7 @@
               style="font-size: 14px; font-family: 'Roboto', sans-serif;"
               onclick={() => isMobileMenuOpen = false}
             >
-              Digitální archiv AMČR
+              {m['nav.app.digitalArchive']()}
             </a>
             <a
               href="https://api.aiscr.cz/"
@@ -350,7 +350,7 @@
               style="font-size: 14px; font-family: 'Roboto', sans-serif;"
               onclick={() => isMobileMenuOpen = false}
             >
-              AMČR API
+              {m['nav.app.api']()}
             </a>
           </div>
         </div>

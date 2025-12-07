@@ -35,33 +35,33 @@
 				
 				<!-- Navigation links -->
 				<div>
-					<h2 class="text-2xl font-bold text-black mb-8" style="font-family: 'Roboto', sans-serif;">
+					<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="text-2xl font-bold text-black mb-8 block hover:text-gray-700" style="font-family: 'Roboto', sans-serif;">
 						{m['footer.navigationTitle']()}
-					</h2>
+					</a>
 					
 					<div class="space-y-3">
 						<div>
-							<a href="{getLocalePath()}/#aplikace" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/#services" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.services']()}
 							</a>
 						</div>
 						<div>
-							<a href="{getLocalePath()}/blog" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/#blog" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.blog']()}
 							</a>
 						</div>
 						<div>
-							<a href="{getLocalePath()}/#faq" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/#faq" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.faq']()}
 							</a>
 						</div>
 						<div>
-							<a href="https://www.aiscr.cz/podminky-uziti" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/#terms" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.terms']()}
 							</a>
 						</div>
 						<div>
-							<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+							<a href="https://www.aiscr.cz/#about" target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.nav.about']()}
 							</a>
 						</div>
@@ -76,12 +76,12 @@
 					
 					<div class="flex flex-wrap gap-12">
 				<!-- Brno office (první podle dokumentu) -->
-				<div>
+				<div style="max-width: 280px;">
 					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
 						{m['footer.brnoOffice']()}
 					</h3>
 					<p class="text-sm text-black mb-3" style="font-family: 'Roboto', sans-serif;">
-						{m['footer.brnoOfficeName']()}
+						{@html m['footer.brnoOfficeName']()}
 					</p>
 					
 					<div class="space-y-3">
@@ -111,12 +111,12 @@
 				</div>
 
 				<!-- Prague office (druhý) -->
-				<div>
+				<div style="max-width: 280px;">
 					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
 						{m['footer.pragueOffice']()}
 					</h3>
 					<p class="text-sm text-black mb-3" style="font-family: 'Roboto', sans-serif;">
-						{m['footer.pragueOfficeName']()}
+						{@html m['footer.pragueOfficeName']()}
 					</p>
 					
 					<div class="space-y-3">
@@ -152,11 +152,21 @@
 		<!-- Partner logos -->
 		<div class="mb-12">
 			<div class="flex flex-wrap gap-8 items-center">
-				<img src="{base}/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
-				<img src="{base}/images/logos/logo-arub.png" alt="ARUB" style="max-height: 48px; width: auto;" />
-				<img src="{base}/images/logos/logo-aru.png" alt="Archeologický ústav AV ČR Praha" style="max-height: 48px; width: auto;" />
-				<img src="{base}/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
-				<img src="{base}/images/logos/infra-black.png" alt="Velké výzkumné infrastruktury" style="max-height: 48px; width: auto;" />
+				<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
+				</a>
+				<a href="https://www.arub.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/logo-arub.png" alt="ARUB" style="max-height: 48px; width: auto;" />
+				</a>
+				<a href="https://www.arup.cas.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/logo-aru.png" alt="Archeologický ústav AV ČR Praha" style="max-height: 48px; width: auto;" />
+				</a>
+				<a href="https://www.avcr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
+				</a>
+				<a href="https://www.vyzkumne-infrastruktury.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/infra-black.png" alt="Velké výzkumné infrastruktury" style="max-height: 48px; width: auto;" />
+				</a>
 			</div>
 		</div>
 
@@ -201,6 +211,7 @@
 <style>
 	.footer-section {
 		position: relative;
+		overflow: hidden;
 	}
 	
 	.footer-section::before {
@@ -211,8 +222,8 @@
 		right: 0;
 		bottom: 0;
 		background-image: var(--footer-bg);
-		background-size: 1312px;
-		background-position: center top;
+		background-size: auto 100%;
+		background-position: right center;
 		background-repeat: no-repeat;
 		opacity: 0.5;
 		pointer-events: none;
@@ -222,5 +233,12 @@
 	.footer-section > div {
 		position: relative;
 		z-index: 1;
+	}
+	
+	/* Skrýt pozadí na mobilech */
+	@media (max-width: 768px) {
+		.footer-section::before {
+			display: none;
+		}
 	}
 </style>
