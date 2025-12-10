@@ -75,42 +75,7 @@
 					</h2>
 					
 					<div class="flex flex-wrap gap-12">
-				<!-- Brno office (první podle dokumentu) -->
-				<div style="max-width: 280px;">
-					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
-						{m['footer.brnoOffice']()}
-					</h3>
-					<p class="text-sm text-black mb-3" style="font-family: 'Roboto', sans-serif;">
-						{@html m['footer.brnoOfficeName']()}
-					</p>
-					
-					<div class="space-y-3">
-						<div class="flex items-start space-x-3">
-							<MapPin size="24" color="#000000" class="mt-1 flex-shrink-0" />
-							<div>
-								<p class="text-sm text-black" style="font-family: 'Roboto', sans-serif;">
-									{@html m['footer.brnoAddress']()}
-								</p>
-							</div>
-						</div>
-
-						<div class="flex items-start space-x-3">
-							<Compass size="24" color="#000000" class="mt-1 flex-shrink-0" />
-							<a href={m['footer.brnoWeb']()} target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
-								{m['footer.brnoWeb']()}
-							</a>
-						</div>
-
-						<div class="flex items-start space-x-3">
-							<MailOpen size="24" color="#000000" class="mt-1 flex-shrink-0" />
-							<a href="mailto:{m['footer.brnoEmail']()}" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
-								{m['footer.brnoEmail']()}
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- Prague office (druhý) -->
+				<!-- Prague office (Čechy - první) -->
 				<div style="max-width: 280px;">
 					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
 						{m['footer.pragueOffice']()}
@@ -140,6 +105,41 @@
 							<MailOpen size="24" color="#000000" class="mt-1 flex-shrink-0" />
 							<a href="mailto:{m['footer.pragueEmail']()}" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
 								{m['footer.pragueEmail']()}
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Brno office (Morava - druhý) -->
+				<div style="max-width: 280px;">
+					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
+						{m['footer.brnoOffice']()}
+					</h3>
+					<p class="text-sm text-black mb-3" style="font-family: 'Roboto', sans-serif;">
+						{@html m['footer.brnoOfficeName']()}
+					</p>
+					
+					<div class="space-y-3">
+						<div class="flex items-start space-x-3">
+							<MapPin size="24" color="#000000" class="mt-1 flex-shrink-0" />
+							<div>
+								<p class="text-sm text-black" style="font-family: 'Roboto', sans-serif;">
+									{@html m['footer.brnoAddress']()}
+								</p>
+							</div>
+						</div>
+
+						<div class="flex items-start space-x-3">
+							<Compass size="24" color="#000000" class="mt-1 flex-shrink-0" />
+							<a href={m['footer.brnoWeb']()} target="_blank" rel="noopener noreferrer" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+								{m['footer.brnoWeb']()}
+							</a>
+						</div>
+
+						<div class="flex items-start space-x-3">
+							<MailOpen size="24" color="#000000" class="mt-1 flex-shrink-0" />
+							<a href="mailto:{m['footer.brnoEmail']()}" class="text-sm text-black hover:text-gray-700 underline" style="font-family: 'Roboto', sans-serif;">
+								{m['footer.brnoEmail']()}
 							</a>
 						</div>
 					</div>
@@ -178,7 +178,7 @@
 				<div class="flex flex-wrap items-center gap-6 text-sm text-black" style="font-family: 'Roboto', sans-serif;">
 					<span>{@html m['footer.copyright']()}</span>
 					<a href="https://amcr-help.aiscr.cz/zakladni-info/osobni-udaje.html" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.privacyPolicy']()}</a>
-					<a href="https://www.aiscr.cz/podminky-uziti" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.termsOfUse']()}</a>
+					<a href="https://www.aiscr.cz/#terms" class="hover:text-gray-700 underline" target="_blank" rel="noopener noreferrer">{m['footer.termsOfUse']()}</a>
 					<button onclick={handleCookieSettings} class="hover:text-gray-700 underline bg-transparent border-none cursor-pointer p-0" style="font-family: 'Roboto', sans-serif; font-size: inherit; color: inherit;">{m['footer.cookiePolicy']()}</button>
 					<span>{m['footer.designBy']()}</span>
 				</div>

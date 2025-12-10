@@ -1,7 +1,6 @@
 <script lang="ts">
   import { m } from '$lib/paraglide/messages.js';
   import { base } from '$app/paths';
-  import { ChevronRight, ChevronLeft, ChevronDown, ChevronUp } from '@lucide/svelte';
 
   const appsData = [
     { key: 'app1', icon: 'search', bgImagePath: 'bg-quick-select-1.webp' },
@@ -19,8 +18,41 @@
   // Sledování rozbalených aplikací
   let expandedApps = $state<Record<string, boolean>>({});
   
+  // 3D rotace karet
+  let cardTransforms = $state<Record<string, string>>({});
+  
   function toggleApp(appKey: string) {
-    expandedApps[appKey] = !expandedApps[appKey];
+    if (expandedApps[appKey]) {
+      // Zavřít aktuální
+      expandedApps[appKey] = false;
+    } else {
+      // Zavřít všechny a otevřít novou
+      expandedApps = { [appKey]: true };
+      // Resetovat transform při rozbalení
+      cardTransforms[appKey] = '';
+    }
+  }
+  
+  function handleMouseMove(e: MouseEvent, appKey: string) {
+    // Žádné náklony když je karta rozbalená
+    if (expandedApps[appKey]) return;
+    
+    const card = e.currentTarget as HTMLElement;
+    const rect = card.getBoundingClientRect();
+    
+    // Pozice myši relativně ke kartě (0-1)
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    
+    // Rotace (-5 až 5 stupňů)
+    const rotateY = (x - 0.5) * 10;
+    const rotateX = (0.5 - y) * 10;
+    
+    cardTransforms[appKey] = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+  }
+  
+  function handleMouseLeave(appKey: string) {
+    cardTransforms[appKey] = '';
   }
 </script>
 
@@ -35,7 +67,7 @@
       </h2>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-8">
+    <div class="cards-container">
       {#each apps as app}
         {@const expandedTextFn = (m as any)[`quickApps.${app.key}.expandedText`]}
         {@const btn1TextFn = (m as any)[`quickApps.${app.key}.btn1Text`]}
@@ -51,13 +83,15 @@
         
         <div 
           class="card-wrapper"
-          style="display: flex; flex-direction: row; transition: all 0.3s ease;"
+          class:expanded={expandedApps[app.key]}
         >
           <!-- Hlavní karta -->
           <button 
             class="card-item"
             onclick={() => toggleApp(app.key)}
-            style="width: 304px; height: 600px; border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; background-image: url('{app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat; cursor: pointer; text-align: left;"
+            onmousemove={(e) => handleMouseMove(e, app.key)}
+            onmouseleave={() => handleMouseLeave(app.key)}
+            style="width: 304px; height: 600px; border-radius: 5px; border: 1px solid #000000; padding: 24px; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; background-color: #DDF0EE; background-image: url('{app.bgImage}'); background-size: contain; background-position: bottom; background-repeat: no-repeat; cursor: pointer; text-align: left; transform: {cardTransforms[app.key] || 'none'};"
             class:desktop-expanded={expandedApps[app.key]}
             class:mobile-expanded={expandedApps[app.key]}
           >
@@ -137,11 +171,6 @@
                     {btnTextFn()}
                   </a>
                 {/if}
-                
-                <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
-                  <ChevronUp size={20} />
-                  <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Sbalit</span>
-                </div>
               </div>
             {/if}
             
@@ -172,34 +201,17 @@
               <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; color: #000000; margin-bottom: 16px;">
                 {(m as any)[`quickApps.${app.key}.title`]()}
               </h3>
-              <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000; margin-bottom: 16px;">
+              <p style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">
                 {(m as any)[`quickApps.${app.key}.subtitle`]()}
               </p>
-              
-              <div style="margin-top: auto; padding-top: 16px; display: flex; align-items: center; gap: 4px;">
-                {#if expandedApps[app.key]}
-                  <!-- Desktop: šipka doleva -->
-                  <span class="desktop-chevron"><ChevronLeft size={20} /></span>
-                  <!-- Mobil: šipka nahoru -->
-                  <span class="mobile-chevron"><ChevronUp size={20} /></span>
-                  <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Sbalit</span>
-                {:else}
-                  <!-- Desktop: šipka doprava -->
-                  <span class="desktop-chevron"><ChevronRight size={20} /></span>
-                  <!-- Mobil: šipka dolů -->
-                  <span class="mobile-chevron"><ChevronDown size={20} /></span>
-                  <span style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 400; color: #000000;">Zobrazit více</span>
-                {/if}
-              </div>
             </div>
           </button>
           
           <!-- Rozbalený panel napravo - pouze desktop -->
-          {#if expandedApps[app.key]}
-            <div 
-              class="expanded-panel"
-              style="width: 280px; height: 600px; border-radius: 0 5px 5px 0; border: 1px solid #000000; border-left: 1px dashed #000000; padding: 24px; flex-direction: column; background-color: #ffffff; overflow-y: auto;"
-            >
+          <div 
+            class="expanded-panel"
+            class:panel-visible={expandedApps[app.key]}
+          >
               <h4 style="font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 700; color: #000000; margin-bottom: 16px;">
                 Více informací
               </h4>
@@ -274,7 +286,6 @@
                 </a>
               {/if}
             </div>
-          {/if}
         </div>
       {/each}
     </div>
@@ -282,6 +293,33 @@
 </section>
 
 <style>
+  /* Kontejner s kartami */
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    overflow: visible;
+  }
+  
+  /* Card wrapper */
+  .card-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    perspective: 1000px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Card item s 3D efektem */
+  .card-item {
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  
+  .card-item:hover {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+  
   /* Mobile-first: rozbalený obsah je zobrazen uvnitř karty */
   .mobile-expanded-content {
     display: flex;
@@ -301,22 +339,23 @@
     display: none;
   }
   
-  /* Rozbalený panel je na mobilu skrytý */
+  /* Rozbalený panel - skrytý ve výchozím stavu */
   .expanded-panel {
+    width: 0;
+    height: 600px;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    border: none;
     display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Šipky pro mobil */
-  .desktop-chevron {
-    display: none;
-  }
   
-  .mobile-chevron {
-    display: inline-flex;
-  }
-  
-  /* Desktop verze (md breakpoint = 768px) */
-  @media (min-width: 768px) {
+  /* Desktop verze (lg breakpoint = 1024px) */
+  @media (min-width: 1024px) {
     /* Na desktopu je rozbalený obsah uvnitř karty skrytý */
     .mobile-expanded-content {
       display: none;
@@ -331,29 +370,35 @@
       display: flex;
     }
     
-    /* Na desktopu je rozbalený panel viditelný */
+    /* Rozbalený panel - zobrazit na desktopu */
     .expanded-panel {
       display: flex;
+    }
+    
+    /* Rozbalený panel - viditelný stav */
+    .expanded-panel.panel-visible {
+      width: 280px;
+      padding: 24px;
+      opacity: 1;
+      border: 1px solid #000000;
+      border-left: 1px dashed #000000;
+      border-radius: 0 5px 5px 0;
+      overflow-y: auto;
     }
     
     /* Úprava border-radius karty když je rozbalená na desktopu */
     .card-item.desktop-expanded {
       border-radius: 5px 0 0 5px !important;
-      border-right: none !important;
-    }
-    
-    /* Šipky pro desktop */
-    .desktop-chevron {
-      display: inline-flex;
-    }
-    
-    .mobile-chevron {
-      display: none;
+      border-right: 1px dashed #000000 !important;
     }
   }
   
-  /* Na mobilu když je karta rozbalená, skryjeme obrázek na pozadí */
-  @media (max-width: 767px) {
+  /* Na mobilu a tabletu když je karta rozbalená, skryjeme obrázek na pozadí */
+  @media (max-width: 1023px) {
+    .cards-container {
+      flex-wrap: wrap;
+    }
+    
     .card-item.mobile-expanded {
       background-image: none !important;
     }

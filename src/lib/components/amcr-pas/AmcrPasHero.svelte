@@ -4,7 +4,7 @@
   import { base } from '$app/paths';
 </script>
 
-<section class="amcr-pas-hero-section px-4 sm:px-6 lg:px-8 mt-20 md:mt-28 lg:mt-32 pt-8 pb-12 md:pt-12 md:pb-16 lg:pt-16 lg:pb-20" style="min-height: auto; --pas-hero-bg: url('{base}/images/amcr-pas/bg-amcr-pas-hero.webp');">
+<section class="amcr-pas-hero-section px-4 sm:px-6 lg:px-8 mt-20 md:mt-28 lg:mt-32 pt-8 pb-12 md:pt-12 md:pb-16 lg:pt-16 lg:pb-20" style="min-height: 840px; --pas-hero-bg: url('{base}/images/amcr-pas/bg-amcr-pas-hero.webp');">
   <div class="max-w-content w-full">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
       <!-- Levý sloupec -->
@@ -81,16 +81,16 @@
 <style>
   .amcr-pas-hero-section {
     position: relative;
-    background-color: #DDF0EE;
+    background-color: #f1faf9;
     background-image: none;
   }
   
-  /* Od tabletu zobrazit obrázek pozadí */
-  @media (min-width: 640px) {
+  /* Od desktopu zobrazit obrázek pozadí */
+  @media (min-width: 1024px) {
     .amcr-pas-hero-section {
-      background-color: transparent;
+      background-color: #f1faf9;
       background-image: var(--pas-hero-bg);
-      background-size: cover;
+      background-size: 1800px auto;
       background-position: center bottom;
       background-repeat: no-repeat;
     }

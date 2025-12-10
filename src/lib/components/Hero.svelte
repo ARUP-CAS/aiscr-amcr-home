@@ -54,24 +54,33 @@
 <style>
   .hero-section {
     position: relative;
-    background-image: var(--hero-bg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #f0faf9;
+    background-image: var(--hero-bg), linear-gradient(to right, #f0faf9, #97a4ab);
+    background-size: 2400px auto, 100% 100%;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
   }
   
   .hero-section::after {
     content: '';
     position: absolute;
     top: 0;
-    right: 0;
+    right: calc(50% - 720px);
     bottom: 0;
     width: 50%;
+    max-width: 720px;
     background-image: var(--hero-bg-right);
-    background-size: contain;
-    background-position: right center;
+    background-size: auto 100%;
+    background-position: left center;
     background-repeat: no-repeat;
     pointer-events: none;
+  }
+  
+  @media (max-width: 1440px) {
+    .hero-section::after {
+      right: 0;
+      max-width: 50%;
+    }
   }
   
   .hero-content {
@@ -91,8 +100,7 @@
     }
     
     .hero-section::after {
-      width: 100%;
-      opacity: 0.3;
+      display: none;
     }
   }
 </style>
