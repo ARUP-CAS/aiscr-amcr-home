@@ -23,6 +23,10 @@
   } : undefined);
 </script>
 
+<svelte:head>
+	<title>AMČR - Archeologická mapa České republiky</title>
+</svelte:head>
+
 <div class="min-h-screen flex flex-col">
   <Header />
   <NewsBanner bind:isClosed={isBannerClosed} bind:isScrolled {latestNews} />
