@@ -27,6 +27,8 @@
 
 <svelte:head>
 	<link rel="icon" href="{base}/amcr_mini.png" type="image/png" />
+	<title>AMČR - Archeologická mapa České republiky</title>
+	<meta name="description" content="Základní informační systém pro evidenci archeologických terénních výzkumů a souvisejících terénních aktivit v ČR." />
 </svelte:head>
 
 {@render children()}

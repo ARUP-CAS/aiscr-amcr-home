@@ -40,7 +40,7 @@
         </div>
       {/if}
       <a
-        href="#nastroje"
+        href="#aplikace"
         class="hero-button inline-flex items-center bg-white text-black hover:bg-gray-50 transition-colors"
         style="padding: 12px 24px; border: 1px solid #000000; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; text-decoration: none; gap: 8px;"
       >

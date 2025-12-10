@@ -1,6 +1,6 @@
-# AIS ČR & AMČR – Domovská stránka
+# AMČR web
 
-Webová prezentace **Archeologického informačního systému České republiky (AIS ČR)** a **Archeologické mapy České republiky (AMČR)**. Projekt je vytvořen pomocí SvelteKit 2 a Svelte 5.
+Webová prezentace **Archeologické mapy České republiky (AMČR)**. Projekt je vytvořen pomocí SvelteKit 2 a Svelte 5.
 
 ---
 
@@ -254,12 +254,10 @@ Projekt používá `@sveltejs/adapter-static` pro generování statických HTML 
 
 ## 📜 Licence
 
-© 2024 Archeologický ústav AV ČR, Praha, v. v. i. & Archeologický ústav AV ČR, Brno, v. v. i.
+© 2025 Archeologický informační systém České republiky
 
 ---
 
 ## 📞 Kontakt
 
 - **Web:** [https://www.aiscr.cz](https://www.aiscr.cz)
-- **Email:** info@aiscr.cz
-- **GitHub:** [https://github.com/ARUP-CAS](https://github.com/ARUP-CAS)
