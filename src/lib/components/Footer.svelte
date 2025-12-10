@@ -77,8 +77,9 @@
 					<div class="flex flex-wrap gap-12">
 				<!-- Prague office (Čechy - první) -->
 				<div style="max-width: 280px;">
-					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">
+					<h3 class="text-black mb-4" style="font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 700;">						
 						{m['footer.pragueOffice']()}
+						<br><br>
 					</h3>
 					<p class="text-sm text-black mb-3" style="font-family: 'Roboto', sans-serif;">
 						{@html m['footer.pragueOfficeName']()}
