@@ -51,5 +51,5 @@ url: 'https://amcr-info.aiscr.cz/'
 abstract: "Main website of the Archaeological Map of the Czech Republic (AMCR) digital repository and domain information system."
 license: CC-BY-NC-4.0
 date-released: 2025-12-11
-version: v0.1.3
+version: v1.0.0
 type: software
