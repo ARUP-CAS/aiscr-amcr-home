@@ -125,7 +125,7 @@
       <div class="hidden lg:flex items-center flex-1 justify-end" style="gap: 32px;">
         <nav class="flex items-center" style="gap: 32px;">
           <a 
-            href="https://amcr-help.aiscr.cz/amcr/" 
+            href="https://amcr-help.aiscr.cz/" 
             target="_blank"
             rel="noopener noreferrer"
             class="text-white hover:text-gray-200 transition-colors"
@@ -263,7 +263,7 @@
     <div class="lg:hidden fixed inset-0 bg-primary z-40" style="top: {currentHeaderHeight()}px;">
       <nav class="px-4 py-4 space-y-3 h-full overflow-y-auto pb-20">
         <a 
-          href="https://amcr-help.aiscr.cz/amcr/" 
+          href="https://amcr-help.aiscr.cz/" 
           target="_blank"
           rel="noopener noreferrer"
           class="block text-white hover:text-gray-200 transition-colors py-2"
