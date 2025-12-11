@@ -3,9 +3,21 @@
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import { setLocale } from '$lib/paraglide/runtime';
 	import { base } from '$app/paths';
+	import { page } from '$app/state';
 	import { onMount, setContext } from 'svelte';
 
 	let { children } = $props();
+	
+	// Produkční doména pro canonical URL
+	const PRODUCTION_HOST = 'https://amcr-info.aiscr.cz';
+	
+	// Canonical URL - vždy ukazuje na produkční doménu
+	const canonicalUrl = $derived(() => {
+		const pathname = page.url.pathname;
+		// Zajistíme trailing slash pro konzistenci
+		const normalizedPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
+		return `${PRODUCTION_HOST}${normalizedPath}`;
+	});
 	
 	// Cookie banner control
 	let openCookieBanner = $state(false);
@@ -26,6 +38,7 @@
 </script>
 
 <svelte:head>
+	<link rel="canonical" href={canonicalUrl()} />
 	<link rel="icon" href="{base}/amcr_mini.png" type="image/png" />
 	<title>AMČR - Archeologická mapa České republiky</title>
 	<meta name="description" content="Základní informační systém pro evidenci archeologických terénních výzkumů a souvisejících terénních aktivit v ČR." />
