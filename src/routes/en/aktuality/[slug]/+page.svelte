@@ -6,7 +6,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Helper pro transformaci absolutních cest na relativní
+	// Helper to transform absolute paths to relative
 	function resolveImagePath(path: string | undefined): string {
 		if (!path) return '';
 		if (path.startsWith('/')) {
@@ -56,7 +56,7 @@
 					Back to news
 				</a>
 
-				<!-- Badge a čas -->
+				<!-- Badge and time -->
 				<div class="flex items-center gap-4 mb-6">
 					{#if data.news.badge}
 						<span
@@ -76,14 +76,14 @@
 					{/if}
 				</div>
 
-				<!-- Nadpis -->
+				<!-- Title -->
 				<h1
 					style="font-family: 'Roboto Slab', serif; font-size: 48px; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; line-height: 1.2;"
 				>
 					{data.news.title}
 				</h1>
 
-				<!-- Datum -->
+				<!-- Date -->
 				<time
 					datetime={data.news.date}
 					class="text-gray-600"
@@ -94,7 +94,7 @@
 			</div>
 		</div>
 
-		<!-- Obsah aktuality -->
+		<!-- News content -->
 		<div class="bg-white py-16">
 			<div class="max-w-content px-4 sm:px-6 lg:px-8">
 				{#if data.news.image}
@@ -106,7 +106,7 @@
 					/>
 				{/if}
 
-				<!-- MARKDOWN OBSAH -->
+				<!-- MARKDOWN CONTENT -->
 				<article class="prose prose-lg max-w-none" style="font-family: 'Roboto', sans-serif;">
 					{@render data.news.content()}
 				</article>
