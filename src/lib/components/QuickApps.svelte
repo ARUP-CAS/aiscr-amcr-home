@@ -18,6 +18,23 @@
   // Sledování rozbalených aplikací
   let expandedApps = $state<Record<string, boolean>>({});
   
+  // Detekce, zda je první nebo poslední karta rozbalená (s možností zpoždění)
+  let delayedFirstExpanded = $state(false);
+  let delayedLastExpanded = $state(false);
+  
+  // Aktualizace zpožděných stavů
+  $effect(() => {
+    if (expandedApps['app1']) {
+      delayedFirstExpanded = true;
+    }
+  });
+  
+  $effect(() => {
+    if (expandedApps['app4']) {
+      delayedLastExpanded = true;
+    }
+  });
+  
   // 3D rotace karet
   let cardTransforms = $state<Record<string, string>>({});
   
@@ -25,11 +42,29 @@
     if (expandedApps[appKey]) {
       // Zavřít aktuální
       expandedApps[appKey] = false;
+      
+      // Zpožděné odebrání třídy pro plynulou animaci
+      if (appKey === 'app1') {
+        setTimeout(() => { delayedFirstExpanded = false; }, 400);
+      } else if (appKey === 'app4') {
+        setTimeout(() => { delayedLastExpanded = false; }, 400);
+      }
     } else {
       // Zavřít všechny a otevřít novou
+      const wasFirstExpanded = expandedApps['app1'];
+      const wasLastExpanded = expandedApps['app4'];
+      
       expandedApps = { [appKey]: true };
       // Resetovat transform při rozbalení
       cardTransforms[appKey] = '';
+      
+      // Zpožděné odebrání třídy pro plynulou animaci při přepnutí
+      if (wasFirstExpanded && appKey !== 'app1') {
+        setTimeout(() => { delayedFirstExpanded = false; }, 400);
+      }
+      if (wasLastExpanded && appKey !== 'app4') {
+        setTimeout(() => { delayedLastExpanded = false; }, 400);
+      }
     }
   }
   
@@ -67,8 +102,8 @@
       </h2>
     </div>
 
-    <div class="cards-container">
-      {#each apps as app}
+    <div class="cards-container" class:first-expanded={delayedFirstExpanded} class:last-expanded={delayedLastExpanded}>
+      {#each apps as app, index}
         {@const expandedTextFn = (m as any)[`quickApps.${app.key}.expandedText`]}
         {@const btn1TextFn = (m as any)[`quickApps.${app.key}.btn1Text`]}
         {@const btn1LinkFn = (m as any)[`quickApps.${app.key}.btn1Link`]}
@@ -80,7 +115,6 @@
         {@const btn3LinkFn = (m as any)[`quickApps.${app.key}.btn3Link`]}
         {@const btnTextFn = (m as any)[`quickApps.${app.key}.btnText`]}
         {@const btnLinkFn = (m as any)[`quickApps.${app.key}.btnLink`]}
-        
         <div 
           class="card-wrapper"
           class:expanded={expandedApps[app.key]}
@@ -299,6 +333,14 @@
     justify-content: center;
     gap: 32px;
     overflow: visible;
+    flex-wrap: wrap;
+  }
+  
+  /* 4x1 layout při velké šířce */
+  @media (min-width: 1401px) {
+    .cards-container {
+      flex-wrap: nowrap;
+    }
   }
   
   /* Card wrapper */
@@ -354,8 +396,8 @@
   }
   
   
-  /* Desktop verze (lg breakpoint = 1024px) */
-  @media (min-width: 1024px) {
+  /* Velký desktop - 4 karty vedle sebe s bočními panely */
+  @media (min-width: 1401px) {
     /* Na desktopu je rozbalený obsah uvnitř karty skrytý */
     .mobile-expanded-content {
       display: none;
@@ -390,6 +432,52 @@
     .card-item.desktop-expanded {
       border-radius: 5px 0 0 5px !important;
       border-right: 1px dashed #000000 !important;
+    }
+    
+    /* Kontejner zůstává centrovaný - karty se rozjedou symetricky */
+    .cards-container {
+      justify-content: center;
+    }
+    
+    /* Když je první karta rozbalená, zarovnat doleva */
+    .cards-container.first-expanded {
+      justify-content: flex-start;
+      padding-left: calc((100% - 1312px) / 2); /* 4*304px + 3*32px = 1312px - centrování */
+    }
+    
+    /* Když je poslední karta rozbalená, zarovnat doprava */
+    .cards-container.last-expanded {
+      justify-content: flex-end;
+      padding-right: calc((100% - 1312px) / 2); /* 4*304px + 3*32px = 1312px - centrování */
+    }
+  }
+  
+  /* Střední šířka (1024px - 1400px) - mobilní chování (2x2 grid) */
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    .cards-container {
+      flex-wrap: wrap;
+      max-width: 700px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    
+    /* Mobilní rozbalený obsah viditelný */
+    .mobile-expanded-content {
+      display: flex;
+    }
+    
+    /* Základní obsah skrytý když je rozbaleno */
+    .card-default-content.mobile-hidden {
+      display: none;
+    }
+    
+    .card-item.mobile-expanded {
+      background-image: none !important;
+    }
+    
+    /* Skrýt desktop panel */
+    .expanded-panel {
+      display: none !important;
     }
   }
   
