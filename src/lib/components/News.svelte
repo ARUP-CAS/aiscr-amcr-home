@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Newspaper, ChevronRight, ChevronDown, ChevronUp } from '@lucide/svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { getLocale } from '$lib/paraglide/runtime.js';
   import { base } from '$app/paths';
 
   interface NewsItem {
@@ -28,6 +29,9 @@
   const visibleNews = $derived(
     news.slice(currentIndex * itemsPerPage, (currentIndex + 1) * itemsPerPage)
   );
+  
+  // Získej správnou cestu podle jazyka
+  const newsBasePath = $derived(getLocale() === 'en' ? `${base}/en/aktuality` : `${base}/aktuality`);
 
   function nextPage() {
     if (currentIndex < totalPages - 1) {
@@ -53,8 +57,9 @@
   }
 
   function formatDate(dateString: string): string {
+    const locale = getLocale();
     const date = new Date(dateString);
-    return date.toLocaleDateString('cs-CZ', {
+    return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'cs-CZ', {
       day: 'numeric',
       month: 'numeric',
       year: 'numeric'
@@ -108,7 +113,7 @@
               {item.badge}
             </span>
             <h3 style="font-family: 'Roboto', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px;">
-              <a href="{base}/aktuality/{item.slug}" class="hover:text-primary transition-colors" style="color: #000000; text-decoration: none;">
+              <a href="{newsBasePath}/{item.slug}" class="hover:text-primary transition-colors" style="color: #000000; text-decoration: none;">
                 {item.title}
               </a>
             </h3>

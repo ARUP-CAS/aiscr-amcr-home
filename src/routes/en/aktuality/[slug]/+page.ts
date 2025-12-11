@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad, EntryGenerator } from './$types';
 
-// Entries pro prerender - generuje URL pouze pro české aktuality
+// Entries pro prerender - generuje URL pouze pro anglické aktuality
 export const entries: EntryGenerator = async () => {
 	const modules = import.meta.glob('/src/content/news/*.md', { eager: true });
 
@@ -10,17 +10,14 @@ export const entries: EntryGenerator = async () => {
 			const { metadata } = module as any;
 			return { slug: metadata.slug, locale: metadata.locale || 'cs' };
 		})
-		.filter((item) => item.locale === 'cs')
+		.filter((item) => item.locale === 'en')
 		.map(({ slug }) => ({ slug }));
 
 	return slugs;
 };
 
-export const load: PageLoad = async ({ params, url }) => {
+export const load: PageLoad = async ({ params }) => {
 	try {
-		// Zjisti aktuální jazyk z URL
-		const locale = url.pathname.startsWith('/en') ? 'en' : 'cs';
-		
 		// Načti všechny aktuality
 		const modules = import.meta.glob('/src/content/news/*.md', { eager: true });
 
@@ -31,13 +28,13 @@ export const load: PageLoad = async ({ params, url }) => {
 			metadata: (module as any).metadata
 		}));
 
-		// Najdi aktualitu podle slug a locale
+		// Najdi aktualitu podle slug a locale (en)
 		const newsItem = allNews.find(
-			(n) => n.metadata.slug === params.slug && (n.metadata.locale || 'cs') === locale
+			(n) => n.metadata.slug === params.slug && (n.metadata.locale || 'cs') === 'en'
 		);
 
 		if (!newsItem) {
-			throw error(404, locale === 'en' ? 'News not found' : 'Aktualita nenalezena');
+			throw error(404, 'News not found');
 		}
 
 		// Extrahuj metadata a content
@@ -46,19 +43,19 @@ export const load: PageLoad = async ({ params, url }) => {
 		// Vrať data do komponenty
 		return {
 			news: {
-				title: metadata.title || (locale === 'en' ? 'Untitled' : 'Bez názvu'),
+				title: metadata.title || 'Untitled',
 				excerpt: metadata.excerpt || '',
 				date: metadata.date || new Date().toISOString().split('T')[0],
 				time: metadata.time || '00:00',
 				badge: metadata.badge || '',
 				slug: params.slug,
 				image: metadata.image,
-				content // ← Render funkce!
+				content
 			}
 		};
 	} catch (err) {
 		console.error('Error loading news:', err);
-		throw error(404, 'Aktualita nenalezena');
+		throw error(404, 'News not found');
 	}
 };
 

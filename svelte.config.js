@@ -27,21 +27,22 @@ const config = {
 		prerender: {
 			entries: [
 				'/',
-				'/en',
-				'/blog',
-				'/en/blog',
-				'/amcr-pas',
-				'/en/amcr-pas',
-				'/downloads',
-				'/en/downloads'
+				'/en/',
+				'/blog/',
+				'/en/blog/',
+				'/amcr-pas/',
+				'/en/amcr-pas/',
+				'/downloads/',
+				'/en/downloads/'
 			],
 			handleMissingId: 'warn',
 			handleHttpError: ({ path }) => {
-				if (path.startsWith('/files/')) {
+				if (path.startsWith('/files/') || path.startsWith('/images/')) {
 					return;
 				}
 				console.warn(`Prerender warning: ${path}`);
-			}
+			},
+			handleUnseenRoutes: 'warn'
 		}
 	},
 	extensions: ['.svelte', '.md']
