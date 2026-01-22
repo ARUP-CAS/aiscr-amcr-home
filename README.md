@@ -27,6 +27,7 @@ Webová prezentace **Archeologické mapy České republiky (AMČR)**. Projekt je
 | [MDsveX](https://mdsvex.pngwn.io/) | 0.12 | Markdown pro Svelte |
 | [Lucide](https://lucide.dev/) | - | Ikony |
 | [TypeScript](https://www.typescriptlang.org/) | 5.x | Typová kontrola |
+| [Vite](https://vite.dev/) | 7.x | Nástorj pro buildování |
 
 ---
 
@@ -254,7 +255,7 @@ Projekt používá `@sveltejs/adapter-static` pro generování statických HTML 
 
 ## 📜 Licence
 
-© 2025 Archeologický informační systém České republiky
+Viz [LICENSE](LICENSE) soubor.
 
 ---
 
