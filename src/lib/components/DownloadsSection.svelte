@@ -30,7 +30,7 @@
 
   const getDocumentsForCategory = (prefix: string, categoryKey: string) => {
     if (prefix === 'amcrPas') {
-      if (categoryKey === 'cat1') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }, { key: 'doc7' }];
+      if (categoryKey === 'cat1') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }, { key: 'doc7' }, { key: 'doc8' }];
       if (categoryKey === 'cat2') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }];
       if (categoryKey === 'cat3') return [{ key: 'doc1' }, { key: 'doc2' }, { key: 'doc3' }, { key: 'doc4' }, { key: 'doc5' }, { key: 'doc6' }];
       if (categoryKey === 'cat4') return [{ key: 'doc1' }, { key: 'doc2' }];
@@ -61,7 +61,7 @@
     <div class="space-y-12">
       {#each categories as category, index}
         {@const sectionIds = ['zakladni-dokumentace', 'publikace-materialy', 'data-nastroje']}
-        <div id={sectionIds[index]} style="scroll-margin-top: 140px;">
+        <div id={sectionIds[index]} class="{prefix === 'downloadsPage' && index === 2 ? 'data-nastroje-bg' : ''}" style="scroll-margin-top: 140px;">
           <h3 class="font-bold mb-6 text-center" style="font-family: 'Roboto', sans-serif; font-size: 20px; color: #000000;">
             {(m as any)[`${prefix}.downloads.${category.key}.title`]()}
           </h3>
@@ -153,6 +153,11 @@
     background-repeat: no-repeat;
     background-color: #FFFFFF;
   }
+
+  .downloads-main {
+    background-size: 100% auto;
+    overflow-x: hidden;
+  }
   
   .downloads-amcr-pas::before,
   .downloads-main::before {
@@ -172,14 +177,66 @@
     z-index: 1;
   }
   
+  .data-nastroje-bg {
+    position: relative;
+    margin-left: calc(-50vw + 50%);
+    width: 100vw;
+    padding-left: calc(50vw - 50%);
+    padding-right: calc(50vw - 50%);
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .data-nastroje-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: var(--downloads-bg);
+    background-size: 100% auto;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+
+  .data-nastroje-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    z-index: 0;
+  }
+
+  .data-nastroje-bg > * {
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: 768px) {
     .downloads-amcr-pas,
     .downloads-main {
       background-image: none;
     }
-    
+
     .downloads-amcr-pas::before,
     .downloads-main::before {
+      display: none;
+    }
+
+    .data-nastroje-bg {
+      margin-left: 0;
+      width: auto;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .data-nastroje-bg::before,
+    .data-nastroje-bg::after {
       display: none;
     }
   }
