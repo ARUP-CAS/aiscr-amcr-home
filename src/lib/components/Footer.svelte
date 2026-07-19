@@ -153,8 +153,14 @@
 		<!-- Partner logos -->
 		<div class="mb-12">
 			<div class="flex flex-wrap gap-8 items-center">
-				<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
-					<img src="{base}/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
+				<!-- Spolufinancováno EU + MŠMT (jeden banner, dvě klikatelné části) -->
+				<div class="relative inline-flex items-center" style="height: 48px;">
+					<img src="{base}/images/logos/eu-msmt-{currentLocale}.webp" alt="" style="height: 48px; width: auto; display: block;" />
+					<a href="https://opjak.cz/" target="_blank" rel="noopener noreferrer" aria-label={m['aria.euFunding']()} class="absolute top-0 left-0 h-full" style="width: 64%;"></a>
+					<a href="https://msmt.gov.cz/" target="_blank" rel="noopener noreferrer" aria-label={m['aria.msmt']()} class="absolute top-0 right-0 h-full" style="width: 36%;"></a>
+				</div>
+				<a href="https://www.avcr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
 				</a>
 				<a href="https://www.arub.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
 					<img src="{base}/images/logos/logo-arub.png" alt="ARUB" style="max-height: 48px; width: auto;" />
@@ -162,8 +168,8 @@
 				<a href="https://www.arup.cas.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
 					<img src="{base}/images/logos/logo-aru.png" alt="Archeologický ústav AV ČR Praha" style="max-height: 48px; width: auto;" />
 				</a>
-				<a href="https://www.avcr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
-					<img src="{base}/images/logos/akademie-ved-black.png" alt="Akademie věd České republiky" style="max-height: 48px; width: auto;" />
+				<a href="https://www.aiscr.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
+					<img src="{base}/images/logos/ais-cr-black.png" alt="Archeologický informační systém" style="max-height: 48px; width: auto;" />
 				</a>
 				<a href="https://www.vyzkumne-infrastruktury.cz" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity flex items-center">
 					<img src="{base}/images/logos/infra-black.png" alt="Velké výzkumné infrastruktury" style="max-height: 48px; width: auto;" />
