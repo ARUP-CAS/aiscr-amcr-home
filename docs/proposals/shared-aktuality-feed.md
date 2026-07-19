@@ -47,7 +47,7 @@ flowchart LR
     ci -->|publish| pages["GitHub Pages<br/>feed/&lt;site&gt;/&lt;locale&gt;.json"]
 
     subgraph consumers["Consuming sites"]
-        a["amcr-home"]
+        a["amcr-info"]
         b["amcr"]
         c["digiarchiv"]
     end
@@ -69,7 +69,7 @@ Frontmatter carries the metadata **and the flags**:
 
 ```yaml
 type: news                              # news | quickinfo
-sites: [amcr-home, amcr, digiarchiv]   # ← which sites show this item
+sites: [amcr-info, amcr, digiarchiv]   # ← which sites show this item
 date: 2024-08-04
 time: "12:00"
 badge: Novinka
@@ -80,7 +80,7 @@ excerpt: Byla spuštěna nová webová aplikace AMČR.
 image: /images/placeholder.webp
 ```
 
-- `sites` is the core flag — an item with `sites: [amcr-home]` shows only here; `sites: [amcr-home, amcr]`
+- `sites` is the core flag — an item with `sites: [amcr-info]` shows only here; `sites: [amcr-info, amcr]`
   shows on both.
 - `type` separates full news articles from short quick-info banner notices.
 - `locale` keeps the existing one-file-per-language convention; a `slug` shared across languages links translations.
@@ -96,8 +96,8 @@ image: /images/placeholder.webp
 Output URLs:
 
 ```
-https://arup-cas.github.io/aiscr-news/feed/amcr-home/cs.json
-https://arup-cas.github.io/aiscr-news/feed/amcr-home/en.json
+https://arup-cas.github.io/aiscr-news/feed/amcr-info/cs.json
+https://arup-cas.github.io/aiscr-news/feed/amcr-info/en.json
 https://arup-cas.github.io/aiscr-news/feed/amcr/cs.json
 ...
 ```
@@ -158,7 +158,7 @@ integration, accepting weaker SEO for individual items.
    but the builder should still sanitize during MD→HTML.
 3. **Caching / versioning.** GitHub Pages cache headers + a `generated` timestamp (or ETag) so
    consumers can cheaply detect "nothing new".
-4. **Site identifiers.** Agree a fixed list of `sites` slugs (`amcr-home`, `amcr`, `digiarchiv`, …)
+4. **Site identifiers.** Agree a fixed list of `sites` slugs (`amcr-info`, `amcr`, `digiarchiv`, …)
    and validate against it in CI.
 5. **Images.** Store item images in the content repo (served from Pages) or keep per-site — feed
    should emit absolute URLs either way.
@@ -166,7 +166,7 @@ integration, accepting weaker SEO for individual items.
 ## 7. Rollout (suggested phases)
 
 1. **PoC (consumer):** in this repo, point `News.svelte` / `NewsBanner.svelte` at a **mock**
-   `feed/amcr-home/cs.json` in `/static`; prove fetch + render + skeleton + caching.
+   `feed/amcr-info/cs.json` in `/static`; prove fetch + render + skeleton + caching.
 2. **Content repo + Action:** stand up `aiscr-news`, migrate existing `src/content/news/*.md`,
    ship the publish Action to GitHub Pages.
 3. **Swap:** replace the mock URL with the live Pages URL; remove the local `import.meta.glob` news
