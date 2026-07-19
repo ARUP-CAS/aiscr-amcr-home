@@ -39,7 +39,7 @@ Three moving parts:
 
 ```mermaid
 flowchart LR
-    subgraph content["ARUP-CAS/aiscr-aktuality (public repo)"]
+    subgraph content["ARUP-CAS/aiscr-news (public repo)"]
         md["news/*.md + quickinfo/*.md<br/>(frontmatter flags)"]
         ci["GitHub Action on push<br/>validate → render MD→HTML → split by site+locale"]
         md --> ci
@@ -48,7 +48,7 @@ flowchart LR
 
     subgraph consumers["Consuming sites"]
         a["amcr-home"]
-        b["aiscr"]
+        b["amcr"]
         c["digiarchiv"]
     end
 
@@ -57,7 +57,7 @@ flowchart LR
     pages -->|"runtime fetch (browser)"| c
 ```
 
-### 4.1 Content repository — `ARUP-CAS/aiscr-aktuality` (public)
+### 4.1 Content repository — `ARUP-CAS/aiscr-news` (public)
 
 ```
 news/2024-08-04-nova-amcr.cs.md
@@ -69,7 +69,7 @@ Frontmatter carries the metadata **and the flags**:
 
 ```yaml
 type: news                              # news | quickinfo
-sites: [amcr-home, aiscr, digiarchiv]   # ← which sites show this item
+sites: [amcr-home, amcr, digiarchiv]   # ← which sites show this item
 date: 2024-08-04
 time: "12:00"
 badge: Novinka
@@ -80,7 +80,7 @@ excerpt: Byla spuštěna nová webová aplikace AMČR.
 image: /images/placeholder.webp
 ```
 
-- `sites` is the core flag — an item with `sites: [amcr-home]` shows only here; `sites: [aiscr, amcr-home]`
+- `sites` is the core flag — an item with `sites: [amcr-home]` shows only here; `sites: [amcr-home, amcr]`
   shows on both.
 - `type` separates full news articles from short quick-info banner notices.
 - `locale` keeps the existing one-file-per-language convention; a `slug` shared across languages links translations.
@@ -96,9 +96,9 @@ image: /images/placeholder.webp
 Output URLs:
 
 ```
-https://arup-cas.github.io/aiscr-aktuality/feed/amcr-home/cs.json
-https://arup-cas.github.io/aiscr-aktuality/feed/amcr-home/en.json
-https://arup-cas.github.io/aiscr-aktuality/feed/aiscr/cs.json
+https://arup-cas.github.io/aiscr-news/feed/amcr-home/cs.json
+https://arup-cas.github.io/aiscr-news/feed/amcr-home/en.json
+https://arup-cas.github.io/aiscr-news/feed/amcr/cs.json
 ...
 ```
 
@@ -116,7 +116,7 @@ Feed shape:
       "badge": "Novinka",
       "title": "Nová AMČR spuštěna",
       "excerpt": "Byla spuštěna nová webová aplikace AMČR.",
-      "image": "https://arup-cas.github.io/aiscr-aktuality/images/placeholder.webp",
+      "image": "https://arup-cas.github.io/aiscr-news/images/placeholder.webp",
       "html": "<p>S velkou radostí…</p>"
     }
   ]
@@ -158,7 +158,7 @@ integration, accepting weaker SEO for individual items.
    but the builder should still sanitize during MD→HTML.
 3. **Caching / versioning.** GitHub Pages cache headers + a `generated` timestamp (or ETag) so
    consumers can cheaply detect "nothing new".
-4. **Site identifiers.** Agree a fixed list of `sites` slugs (`amcr-home`, `aiscr`, `digiarchiv`, …)
+4. **Site identifiers.** Agree a fixed list of `sites` slugs (`amcr-home`, `amcr`, `digiarchiv`, …)
    and validate against it in CI.
 5. **Images.** Store item images in the content repo (served from Pages) or keep per-site — feed
    should emit absolute URLs either way.
@@ -167,7 +167,7 @@ integration, accepting weaker SEO for individual items.
 
 1. **PoC (consumer):** in this repo, point `News.svelte` / `NewsBanner.svelte` at a **mock**
    `feed/amcr-home/cs.json` in `/static`; prove fetch + render + skeleton + caching.
-2. **Content repo + Action:** stand up `aiscr-aktuality`, migrate existing `src/content/news/*.md`,
+2. **Content repo + Action:** stand up `aiscr-news`, migrate existing `src/content/news/*.md`,
    ship the publish Action to GitHub Pages.
 3. **Swap:** replace the mock URL with the live Pages URL; remove the local `import.meta.glob` news
    loader once parity is confirmed.
