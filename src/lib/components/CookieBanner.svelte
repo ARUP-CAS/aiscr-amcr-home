@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	// Bindable prop - rodič může otevřít banner
-	let { shouldOpen = $bindable(false) } = $props<{ shouldOpen?: boolean }>();
+	let { shouldOpen = $bindable(false) }: { shouldOpen?: boolean } = $props();
 	
 	// Internal state
 	let showBanner = $state(false);

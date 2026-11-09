@@ -2,10 +2,10 @@
   import { m } from '$lib/paraglide/messages.js';
   import { base } from '$app/paths';
   
-  let { isBannerClosed = false, isScrolled = false } = $props<{
+  let { isBannerClosed = false, isScrolled = false }: {
     isBannerClosed?: boolean;
     isScrolled?: boolean;
-  }>();
+  } = $props();
   
   // Vypočítat správný margin-top podle stavu headeru a banneru
   const marginTop = $derived(() => {
