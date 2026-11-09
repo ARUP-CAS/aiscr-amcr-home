@@ -14,11 +14,11 @@
     isClosed = $bindable(false), 
     isScrolled = $bindable(false),
     latestNews
-  } = $props<{ 
+  }: { 
     isClosed?: boolean; 
     isScrolled?: boolean;
     latestNews?: NewsItem;
-  }>();
+  } = $props();
   
   let currentLocale = $state('cs');
   let headerHeight = $state(120);
